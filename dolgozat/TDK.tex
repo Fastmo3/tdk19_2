@@ -1,4 +1,4 @@
-\documentclass[12pt,a4paper]{article}
+\documentclass[12pt,a4paper]{book}
 \usepackage[utf8]{inputenc}
 \usepackage[magyar]{babel}
 \usepackage[T1]{fontenc}
@@ -16,16 +16,19 @@
 
 \maketitle
 
-\section{Bevezetés}
+\chapter{Bevezetés}
 
 A dolgozat célja egy működő Petri háló  megjelenítő, szerkesztő %(és futtató?)
 alkalmazás fejlesztése, és bemutatása. %TODO: (folyt)
 
-\section{Petri net}
+\chapter{BPEL folyamatok}
 
-\subsection{Overview}
+A BPEL (Buisness Process Execution Language)üzleti folyamatok végrehajtó nyelve.
+Az OASIS által kezelt XML alapú szabványt használ. 
 
-A Petri net egy matematikai leírómodell elosztott rendszerek bemutatására.
+\chapter{Petri-hálók és alkalmazásaik}
+
+A Petri-háló egy matematikai leírómodell elosztott rendszerek bemutatására.
 A modellt Carl Adam Petri készítette.
 A modell nagyon hasonlít a programozók körében elterjedt folyamat ábrára.
 A háló irányított élekből, helyekből és átmenetekből (\textsl{mint elemek}) áll.
@@ -41,17 +44,50 @@ Formálisan  a petri háló egy \((P, T, F)\) rendezett hármas, ahol
 \item $F\subseteq (P\times T\cup T\times P)$ pedig egy folyamat reláció
 \end{itemize}
 
-\subsection{Colored Petri net}
+\section{Színezett Petri-hálók}
 
-\section{BPEL}
+Konkurrens folyamatok modellezése
 
-A BPEL (Buisness Process Execution Language)üzleti folyamatok végrehajtó nyelve.
-Az OASIS által kezelt XML alapú szabványt használ. 
+\chapter{Az üzleti folyamatok elemeinek leképzése}
 
-\section{The Application}
+%TODO Ide kellene felsorolni, és részletesen leírni, hogy a BPEL egyes elemeinek milyen Petri-háló feleltethető meg.
 
-\subsection{Overview}
+\chapter{Szimulációs keretrendszer}
 
-\subsection{Usage}
+%TODO Be kell mutatni a C# nyelvű alkalmazást.
+
+\section{Elvárások az alkalmazással szemben}
+
+%TODO Itt kellene röviden áttekinteni az alkalmazással szemben támasztott követelményeket.
+
+\section{Az alkalmazás felépítése}
+
+%TODO Osztály és blokkdiagramok formájában be kellene mutatni, hogy milyen fő elemekből épül fel az alkalmazás.
+
+\section{C\# implementáció}
+
+%TODO Meg kellene mutatni, hogy milyen API és újrahasznosítható elemek készültek el.
+
+\section{Tesztelés, tapasztalatok}
+
+%TODO Itt kifejezetten az alkalmazás szemszögéből (nem pedig üzleti folyamatokra vonatkozóan) kellene bemutatni az alkalmazást.
+
+\chapter{Komplex folyamatok vizsgálata}
+
+\section{Első példa üzleti folyamat}
+
+%TODO A címet majd nyilván át kell írni. Itt szerepelne egy bonyolultabb üzleti folyamat, és a konverzió eredménye.
+
+\section{Második példa üzleti folyamat}
+
+%TODO Hasonló az előző szakaszhoz, csak másik példával.
+
+\chapter{Összegzés}
+
+%TODO Leírni a dolgozatban elért eredményeket, és a további terveket!
+
+\chapter{Hivatkozások}
+
+%TODO A felhasznált hivatkozásokat már az elején célszerű összegyűjteni!
 
 \end{document}
