@@ -5,10 +5,12 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+\usepackage{listings}
 \usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
 \date{\vspace{-5ex}}
 
 %TODO a petri háló írása legyen konzisztens
+
 
 \title{BPEL folyamatok Petri-háló alapú reprezentációja és szimulációja}
 
@@ -25,6 +27,288 @@ alkalmazás fejlesztése, és bemutatása. %TODO: (folyt)
 
 A BPEL (Buisness Process Execution Language)üzleti folyamatok végrehajtó nyelve.
 Az OASIS által kezelt XML alapú szabványt használ. 
+A dokumentum felépítésében egy XML dokumentum, mely a WS-BPEL szabvány szerint validált. A BPEL programok szerkezetét célszerű egy mintával áttekinteni, a jobb megértéshez. %TODO link: http://docs.oasis-open.org/wsbpel/2.0/OS/wsbpel-v2.0-OS.html chapter 5 section 1
+Vegyük a következő példát.  \textsl{Adott egy online rendelést felvevő cég. A cég egy automata segítségével generál számlákat A számla az ár kiszámítása, a futár kiválasztása, és a szükséges termelés ütemezése után kerül kiállításra.} A lépéseket az alábbi ábra mutatja be: %TODO insert fig1.png 
+Az ábrán a téglalapok egy rész processzt jelentenek. Az egy blokkban különállóak pedig konkurens proceszeket. A szaggatott vonal szekvenciát jelöl, míg a teli/sima pedig vezérlő linkek, a konkurens processzek szinkronizációját, várakoztatását lehet velük megoldani. Az ábra nem képez átíratot, csak mint egy standard érthető vizualizáció segíti a megértést. 
+
+A program következő része egy WSDL szabvány ami a portot adja meg a processz számára:
+\newpage
+
+\begin{lstlisting}
+<wsdl:definitions
+   targetNamespace="http://manufacturing.org/wsdl/purchase"
+   xmlns:sns="http://manufacturing.org/xsd/purchase"
+   xmlns:pos="http://manufacturing.org/wsdl/purchase"
+   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+   xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype"
+   xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   
+   <wsdl:types>
+      <xsd:schema>
+         <xsd:import namespace="http://manufacturing.org/xsd/purchase"
+          schemaLocation="http://manufacturing.org/xsd/purchase.xsd" />
+      </xsd:schema>
+   </wsdl:types> 
+
+   <wsdl:message name="POMessage">
+      <wsdl:part name="customerInfo" type="sns:customerInfoType" />
+      <wsdl:part name="purchaseOrder" type="sns:purchaseOrderType" />
+   </wsdl:message>
+
+   <wsdl:message name="InvMessage">
+      <wsdl:part name="IVC" type="sns:InvoiceType" />
+   </wsdl:message>
+
+   <wsdl:message name="orderFaultType">
+     <wsdl:part name="problemInfo" element="sns:OrderFault"/>
+   </wsdl:message>
+
+   <wsdl:message name="shippingRequestMessage">
+      <wsdl:part name="customerInfo" element="sns:customerInfo" />
+   </wsdl:message>
+
+   <wsdl:message name="shippingInfoMessage">
+      <wsdl:part name="shippingInfo" element="sns:shippingInfo" />
+   </wsdl:message>
+
+   <wsdl:message name="scheduleMessage">
+      <wsdl:part name="schedule" element="sns:scheduleInfo" />
+   </wsdl:message> 
+
+   <!-- portTypes supported by the purchase order process -->
+
+   <wsdl:portType name="purchaseOrderPT">
+      <wsdl:operation name="sendPurchaseOrder">
+         <wsdl:input message="pos:POMessage" />
+         <wsdl:output message="pos:InvMessage" />
+         <wsdl:fault name="cannotCompleteOrder"
+            message="pos:orderFaultType" />
+      </wsdl:operation>
+   </wsdl:portType>
+   
+   <wsdl:portType name="invoiceCallbackPT">
+      <wsdl:operation name="sendInvoice">
+         <wsdl:input message="pos:InvMessage" />
+      </wsdl:operation>
+   </wsdl:portType>
+
+   <wsdl:portType name="shippingCallbackPT">
+      <wsdl:operation name="sendSchedule">
+         <wsdl:input message="pos:scheduleMessage" />
+      </wsdl:operation>
+   </wsdl:portType>
+
+   <!-- portType supported by the invoice services -->
+
+   <wsdl:portType name="computePricePT">
+      <wsdl:operation name="initiatePriceCalculation">
+         <wsdl:input message="pos:POMessage" />
+      </wsdl:operation>      
+      
+      <wsdl:operation name="sendShippingPrice">
+         <wsdl:input message="pos:shippingInfoMessage" />
+      </wsdl:operation>
+   </wsdl:portType>
+
+   <!-- portType supported by the shipping service -->
+
+   <wsdl:portType name="shippingPT">
+      <wsdl:operation name="requestShipping">
+         <wsdl:input message="pos:shippingRequestMessage" />
+         <wsdl:output message="pos:shippingInfoMessage" />
+         <wsdl:fault name="cannotCompleteOrder"
+            message="pos:orderFaultType" />
+      </wsdl:operation>
+   </wsdl:portType>
+
+   <!-- portType supported by the production scheduling process -->
+
+   <wsdl:portType name="schedulingPT">
+      <wsdl:operation name="requestProductionScheduling">
+         <wsdl:input message="pos:POMessage" />
+      </wsdl:operation>
+      
+      <wsdl:operation name="sendShippingSchedule">
+         <wsdl:input message="pos:scheduleMessage" />
+      </wsdl:operation>
+   </wsdl:portType> 
+
+   <plnk:partnerLinkType name="purchasingLT">
+      <plnk:role name="purchaseService"
+         portType="pos:purchaseOrderPT" />
+   </plnk:partnerLinkType> 
+
+   <plnk:partnerLinkType name="invoicingLT">
+      <plnk:role name="invoiceService"
+         portType="pos:computePricePT" />
+      <plnk:role name="invoiceRequester"
+         portType="pos:invoiceCallbackPT" />
+   </plnk:partnerLinkType> 
+
+   <plnk:partnerLinkType name="shippingLT">
+      <plnk:role name="shippingService"
+         portType="pos:shippingPT" />
+      <plnk:role name="shippingRequester"
+         portType="pos:shippingCallbackPT" />
+   </plnk:partnerLinkType> 
+
+   <plnk:partnerLinkType name="schedulingLT">
+      <plnk:role name="schedulingService"
+         portType="pos:schedulingPT" />
+   </plnk:partnerLinkType>
+</wsdl:definitions>
+\end{lstlisting}
+
+A szükséges portok és linkek definiálása után most a rendelés processzét definiáljuk hasonlóképp. 
+\begin{lstlisting}
+<process name="purchaseOrderProcess"
+   targetNamespace="http://example.com/ws-bp/purchase"
+   xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+   xmlns:lns="http://manufacturing.org/wsdl/purchase"> 
+   
+   <documentation xml:lang="EN">
+      A simple example of a WS-BPEL process for handling a purchase
+      order.
+   </documentation> 
+
+   <partnerLinks>
+      <partnerLink name="purchasing"
+         partnerLinkType="lns:purchasingLT" myRole="purchaseService" />
+      <partnerLink name="invoicing" partnerLinkType="lns:invoicingLT"
+         myRole="invoiceRequester" partnerRole="invoiceService" />
+      <partnerLink name="shipping" partnerLinkType="lns:shippingLT"
+         myRole="shippingRequester" partnerRole="shippingService" />
+      <partnerLink name="scheduling"
+         partnerLinkType="lns:schedulingLT"
+         partnerRole="schedulingService" />
+   </partnerLinks> 
+
+   <variables>
+      <variable name="PO" messageType="lns:POMessage" />
+      <variable name="Invoice" messageType="lns:InvMessage" />
+      <variable name="shippingRequest"
+         messageType="lns:shippingRequestMessage" />
+      <variable name="shippingInfo"
+         messageType="lns:shippingInfoMessage" />
+      <variable name="shippingSchedule"
+         messageType="lns:scheduleMessage" />
+   </variables> 
+
+   <faultHandlers>
+      <catch faultName="lns:cannotCompleteOrder"
+         faultVariable="POFault"
+         faultMessageType="lns:orderFaultType">
+         <reply partnerLink="purchasing"
+            portType="lns:purchaseOrderPT"
+            operation="sendPurchaseOrder" variable="POFault"
+            faultName="cannotCompleteOrder" />
+      </catch>
+   </faultHandlers> 
+
+   <sequence>
+      <receive partnerLink="purchasing" portType="lns:purchaseOrderPT"
+         operation="sendPurchaseOrder" variable="PO"
+         createInstance="yes">
+         <documentation>Receive Purchase Order</documentation>
+      </receive>
+
+      <flow>
+         <documentation>
+            A parallel flow to handle shipping, invoicing and
+            scheduling
+         </documentation>
+         <links>
+            <link name="ship-to-invoice" />
+            <link name="ship-to-scheduling" />
+         </links>
+         <sequence>
+            <assign>
+               <copy>
+                  <from>$PO.customerInfo</from>
+                  <to>$shippingRequest.customerInfo</to>
+               </copy>
+            </assign>
+            <invoke partnerLink="shipping" portType="lns:shippingPT"
+               operation="requestShipping"
+               inputVariable="shippingRequest"
+               outputVariable="shippingInfo">
+               <documentation>Decide On Shipper</documentation>
+               <sources>
+                  <source linkName="ship-to-invoice" />
+               </sources>
+            </invoke>
+            <receive partnerLink="shipping"
+               portType="lns:shippingCallbackPT"
+               operation="sendSchedule" variable="shippingSchedule">
+               <documentation>Arrange Logistics</documentation>
+               <sources>
+                  <source linkName="ship-to-scheduling" />
+               </sources>
+            </receive>
+         </sequence>
+         <sequence>
+            <invoke partnerLink="invoicing"
+               portType="lns:computePricePT"
+               operation="initiatePriceCalculation"
+               inputVariable="PO">
+               <documentation>
+                  Initial Price Calculation
+               </documentation>
+            </invoke>
+            <invoke partnerLink="invoicing"
+               portType="lns:computePricePT"
+               operation="sendShippingPrice"
+               inputVariable="shippingInfo">
+               <documentation>
+                  Complete Price Calculation
+               </documentation>
+               <targets>
+                  <target linkName="ship-to-invoice" />
+               </targets>
+            </invoke>
+            <receive partnerLink="invoicing"
+               portType="lns:invoiceCallbackPT"
+               operation="sendInvoice" variable="Invoice" />
+         </sequence>
+         <sequence>
+            <invoke partnerLink="scheduling"
+               portType="lns:schedulingPT"
+               operation="requestProductionScheduling"
+               inputVariable="PO">
+               <documentation>
+                  Initiate Production Scheduling
+               </documentation>
+            </invoke>
+            <invoke partnerLink="scheduling"
+               portType="lns:schedulingPT"
+               operation="sendShippingSchedule"
+               inputVariable="shippingSchedule">
+               <documentation>
+                  Complete Production Scheduling
+               </documentation>
+               <targets>
+                  <target linkName="ship-to-scheduling" />
+               </targets>
+            </invoke>
+         </sequence>
+      </flow>
+      
+      <reply partnerLink="purchasing" portType="lns:purchaseOrderPT"
+         operation="sendPurchaseOrder" variable="Invoice">
+         <documentation>Invoice Processing</documentation>
+      </reply>
+   </sequence>
+</process>
+\end{lstlisting}
+ 
+ A kódban szereplő \texttt{<partnerLinks>} tartalmaz mindent (így közvetetten mindenkit) amik kapcsolatba kerül a processzel. Az elnevezés tükrözi a résztvevő partit, valamint a résztvevő feladatát, szándékát. A \texttt{<variables>} a változókat tartalmazza, míg a \texttt{<faultHandlers>} a hibakezelőket. A hibakezelés egy try-catch-finally "hibakezelőblokk" helyett az XML mentalitását tükröző módon kerül lekezelésre, a handlerek által. A kód többi része a processz standard definíciójához tartozik. A példák alapján elmondható, hogy a program a következő struktúra szerint épül fel.
+\begin{itemize}
+\item \textbf{Definíció: } aprocessz neve, névtere és különféle sémahívások, majd bővítmények, importok
+\item \textbf{PartnerLinkek: } A megfelelő partnerek hozzáadása attribútumokkal. 
+\item \textbf{Változók}
+\item \textbf{Hibakezelők}
+\item\textbf{Eseménykezelők}
+\end{itemize}
 
 \chapter{Petri-hálók és alkalmazásaik}
 
@@ -46,11 +330,13 @@ Formálisan  a petri háló egy \((P, T, F)\) rendezett hármas, ahol
 
 \section{Színezett Petri-hálók}
 
-Konkurrens folyamatok modellezése
+Konkurens folyamatok modellezése
 
 \chapter{Az üzleti folyamatok elemeinek leképzése}
 
 %TODO Ide kellene felsorolni, és részletesen leírni, hogy a BPEL egyes elemeinek milyen Petri-háló feleltethető meg.
+A leképzéskor elsődlegesen az aktivitás elemei kerülnek a figyelem középpontjába, a séma és különböző definíciók csak másodlagos helyet kapnak. Ez azért lényeges, mert a séma nem egy dinamikus folyamatot ír le, hanem az adott folyamat és eleminek tulajdonságát. Mivel a Petri-háló egy folyamat személtetésére lett létrehozva ezért főleg az aktivitás
+
 
 \chapter{Szimulációs keretrendszer}
 
@@ -81,6 +367,7 @@ Konkurrens folyamatok modellezése
 \section{Második példa üzleti folyamat}
 
 %TODO Hasonló az előző szakaszhoz, csak másik példával.
+
 
 \chapter{Összegzés}
 
