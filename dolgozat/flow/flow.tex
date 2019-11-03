@@ -1,0 +1,166 @@
+\documentclass[a4paper]{article}
+
+% Set margins
+\usepackage[hmargin=2.5cm, vmargin=3cm]{geometry}
+
+\frenchspacing
+
+% Language packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[magyar]{babel}
+
+% AMS
+\usepackage{amssymb,amsmath}
+
+% Graphic packages
+\usepackage{graphicx}
+
+% Colors
+\usepackage{color}
+\usepackage[usenames,dvipsnames]{xcolor}
+
+% Listings
+\usepackage{listings}
+
+% Question
+\newenvironment{question}[1]
+{\noindent\textcolor{OliveGreen}{$\circ$ \textit{#1}}
+
+\smallskip
+
+\color{Gray}
+
+}{\bigskip}
+
+% Task
+\newenvironment{task}[1]
+{\noindent\textcolor{RoyalBlue}{$\circ$ \textit{#1}}
+
+\smallskip
+
+\color{Gray}
+
+}{\bigskip}
+
+% Notification
+\newenvironment{notification}[1]
+{\noindent\textcolor{Peach}{$\circ$ \textit{#1}}
+
+\smallskip
+
+\color{Gray}
+
+}{\bigskip}
+
+% Problem
+\newenvironment{problem}[1]
+{\noindent\textcolor{OrangeRed}{$\circ$ \textit{#1}}
+
+\smallskip
+
+\color{Gray}
+
+}{\bigskip}
+
+% Solution
+\newenvironment{solution}
+{\color{RoyalBlue}}{\bigskip}
+
+% Comment
+\newenvironment{comment}
+{\color{Green}}{\bigskip}
+
+\lstset{% setup listings
+        framexleftmargin=16pt,
+        framextopmargin=6pt,
+        framexbottommargin=6pt, 
+        frame=single, rulecolor=\color{black}
+}
+
+\begin{document}
+
+\begin{center}
+   \huge \textbf{Üzelti folyamatok}
+\end{center}
+
+\vskip 0.3cm
+
+\section{Folyamként való modellezés}
+
+Az üzleti folyamatokat kezelhetjük úgy, mint bizonyos elemek (a Petri-hálók esetében tokenek) feldolgozását.
+Ekkor a folyamat leírása egy olyan írányított gráf lesz, amelynek az éleihez kapacitásértékeket rendelhetünk.
+Hasonló modellekkel találkozhatunk a közlekedési útvonalak, áram-, víz- és gázrendszerek esetében.
+
+A kérdés az, hogy a topológia és az egyes kapacitások ismeretében mit tudunk elmondani az egész folyamat áteresztőképességéről, illetve hogy mely részekre lehet majd szükséges a kapacitásokat növelni ahhoz, hogy az áteresztőképesség javítható legyen.
+(Az áteresztőképesség itt nekünk annak a mértékét jellemzi, hogy mennyi elemet sikerült feldolgozni.)
+A kapacitásnövelés tulajdonképpen tároló (\textit{buffer}) csomópontok beiktatását jelenti.
+A feladat megoldása arra ad választ, hogy egy létező folyamatot hogyan lehet javítani.
+
+Az egyik kézenfekvő megoldás, hogy ha a problémát folyamfeladatként fogalmazzuk meg.
+Az üzleti folyamat esetében kell lenni jól definiált be- és kilépési pontoknak.
+Jelölje $s$ a belépési ponthoz (forrás, \textit{source}) és $t$ a kilépési ponthoz (cél, \textit{target}) tartozó csomópontokat.
+A súlyokat/kapacitásokat az egyes élekhez szeretnénk rendelni.
+A kapacitás jelölheti például a feldolgozott elemek másodpercenkénti számát.
+
+A maximális folyam és a minimális vágás feladatpár megoldására van szükség, amelyek egymásnak duálisai \cite{ford2009maximal}.
+Jelöljük az élekhez tartozó súlyokat $c_{ij}$-vel (\textit{capacity}), ahol az $i$ és $j$ a csomópontok indexeit jelölik, amelyeket az él összeköt.
+A probléma megoldásához meg kell nézni, hogy az egyes éleken milyen mértékű folyam képes még áthaladni.
+Ezek lesznek az optimalizálási feladat döntési változói, amelyeket $x_{ij}$-vel jelölünk.
+Feltételezzük, hogy $x_{ij} \geq 0$.
+A folyam kapacitásértékeinek figyelembevétele azt jelenti, hogy $x_{ij} \leq c_{ij}$ bármely $i, j$ esetén.
+
+A folyamnak egy további fontos tulajdonsága, hogy egy csomópontból pontosan olyan folyamnak szabad csak kimennie, mint amilyen belement.
+Ez egy tetszőleges $k$ csomópont esetén a következőképpen írható le:
+\[
+\displaystyle
+\sum_{i} x_{i, k} = \sum_{j} x_{k, j}.
+\]
+Ennek az összes $k$ csomópontra teljesülnie kell.
+
+Maximális folyamot akkor kapunk, hogy ha a rendszer az előző feltételek mellett a lehető legnagyobb $x_{i, j}$ értékeket veszi fel, tehát
+\[
+\displaystyle \sum_{i, j} x_{i, j} \rightarrow \max!
+\]
+A feltételek és a célfüggvény ismeretében ez egy lineáris programozási feladatot eredményez.
+
+\section{Folyamatszabályozási modell}
+
+A folyamatszabályozban megkülönböztetnek diszkrét- és folytonos modelleket \cite{bikfalvi}.
+Az üzleti folyamatok esetében mindkettő használható, attól függően, hogy a konkrét bekövetkezéseket vesszük-e figyelembe, vagy pedig egy valószínűségi alapon történő, folytonos közelítést szeretnénk-e.
+
+A diszkrét leírási mód közvetlenül visszaadja a Petri-hálós reprezentációt.
+
+Amennyiben a folyamatok mennyiségi jellemzőit szeretnénk folytonosan vizsgálni, úgy a rendszer elemeit (ebben az esetben a Petri-háló csomópontjait), mint függvényeket kezelhetjük.
+
+Ha ez a függvénykapcsolat egy lineáris kapcsolatot ad meg (tehát a bemenetek súlyozva jelennek meg a kimeneteken), akkor a folyamfeladathoz jutunk vissza.
+
+A rendszerbe érkező jelek tulajdonképpen a feldolgozandó elemek (tokenek) mértékét írják le.
+Ekkor a linearitás feltételezése is elegendő lehet.
+
+Tegyük fel, hogy az üzleti folyamat bonyolultabb elemeket is tartalmazhat.
+A szabályzás módja lehet például az, hogy ha a rendszerben egy adott áteresztőképességet szeretnénk tartani.
+Ennek a szabályzásához 3 alapelemre van szükségünk.
+\begin{itemize}
+\item Legyen egy $P$ (\textit{proportional}) szabályzónk, amelyik a beérkezett tokenek számával arányosan adja a kimenetét.
+\item Az $I$ (\textit{integral}) a korábban beérkezett tokenek számától teszi függővé a feldolgozás sebességét. (Ezzel így például a terheltebb feldolgozási csomópontokat modellezhetjük.)
+\item A $D$ (\textit{derivative}) a tokenek mennyiségének változásával arányos.
+\end{itemize}
+Jelöljük $e(t)$-vel a $t$ időpontban a bemenetre érkező tokenek mennyiségét.
+A $K_P$, $K_I$ és $K_D$ valós konstansok jelöljék a szabályozáshoz használt arányos, integráló és differenciáló tag súlyát.
+Amennyiben egy $u(t)$ kimenetet várunk el, úgy ezeket az értékeket az alábbi összefüggés alapján kell meghatározni:
+\[
+u(t) =
+K_P \cdot e(t) +
+K_I \displaystyle \int_{0}^{t} \! e(\tau) \; \textrm{d}\tau +
+K_D \dfrac{\partial e(t)}{\partial t}.
+\]
+Ez így egy lineáris szabályzót eredményez, mivel az ismeretlen paraméterek lineáris viszonyban vannak a bemeneti jelzéssel, annak integráljával és deriváltjával.
+
+Ez a szabályzókör legegyszerűbb modellje (amely már az említett összetevőket figyelembe veszi).
+Egy általános üzleti folyamat modellezése esetén a topológia és a csomópontokhoz tartozó függvények ismeretében lehet hasonló formában modellezni az optimalizálási problémát.
+
+\bibliographystyle{acm}
+\bibliography{flow}
+
+\end{document}
