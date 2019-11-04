@@ -779,22 +779,22 @@ A hálóban az alábbi megkötések élnek a folyamerősségekre
 \begin{itemize}
 \item forrás helyek esetén: $\sum_y I_y=Q_x$ ($y$: kimenő élek)
 \item nyelő helyek esetén: $\sum_y I_y \leq C_x$ ($y$: bejövő élek)
-\item belső helyek esetén: $\sum_{y(ki)} I_y\leq \sum_{y(be)}$
-\item tranziciók esetén: $\sum_y I_y\leq C_x$ ($y:$ bejövő élek)
-\item $\sum_{y(ki)} I_y = \sum_{y(be)}$
+\item belső helyek esetén: 
+\item$\sum_{y(ki)} I_y\leq \sum_{y(be)} I_y$
+\item tranziciók esetén: 
+\begin{itemize}
+\item $\sum_y I_y\leq C_x$ ($y:$ bejövő élek)
+\item $\sum_{y(ki)} I_y = \sum_{y(be)} I_y$
 \item $\forall$ kimenő $x,y$ élre $I_x=I_y$
 \end{itemize}
-az AND típusú tranzakciók esetén még ezen felül teljesül, hogy $\forall$ bejövő $x,y$ élre:$I_x = I_y$.
+\end{itemize}
+az AND típusú tranzakciók esetén még ezen felül teljesül, hogy $\forall$ bejövő $x,y$ élre:\\
+$I_x = I_y$.
 
-Az egyes belső helyeken a bufferbe áramló tokenek  eredő intentitása:
+Az egyes belső helyeken a pufferbe áramló tokenek  eredő intentitása:
 
-$$F= \sum$$
-TODO!!
-%ezt hogyan????
-%F = 	Szumma_{x_belső hely} 
-%( Szumma_{y:bejövő élek x-nél} - Szumma_{y:kimenő élek  x-nél} )
-
-Az F függvény 0 értéke esetén nincs szükség belső bufferre.
+$$F= \sum_{x(\text{belső hely})} \left( \sum_{y(\text{x bejövő él})} I_y - \sum_{y(\text{x kimenő él})} I_y \right)$$
+Az F függvény 0 értéke esetén nincs szükség belső pufferre.
 
 A fenti feladatot egy LP programozási feladatnak is tekinthető, ahol a változók az élek $I_x$ nem negatív intenzitásai és a célfüggvény:
 $$F\Rightarrow \min$$ alakú.
