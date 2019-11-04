@@ -398,7 +398,7 @@ Az elemzések során az alábbi főbb tulajdonságok elemzésére szoktak kitér
 \chapter{Az üzleti folyamatok elemeinek leképzése}
 
 %TODO Ide kellene felsorolni, és részletesen leírni, hogy a BPEL egyes elemeinek milyen Petri-háló feleltethető meg.
-A leképzéskor elsődlegesen az aktivitás elemei kerülnek a figyelem középpontjába, a séma és különböző definíciók csak másodlagos helyet kapnak. Ez azért lényeges, mert a séma nem egy dinamikus folyamatot ír le, hanem az adott folyamat és eleminek tulajdonságát. Mivel a Petri-háló egy folyamat személtetésére lett létrehozva ezért főleg az aktív elemek a szignifikánsak a konverzió során. Az alábbi elemeknek feleltetünk meg egy egy részhálót:
+A leképzéskor elsődlegesen az aktivitás elemei kerülnek a figyelem középpontjába, a séma és különböző definíciók csak másodlagos helyet kapnak. Ez azért lényeges, mert a séma nem egy dinamikus folyamatot ír le, hanem az adott folyamat és eleminek tulajdonságát. Mivel a Petri-háló egy folyamat személtetésére lett létrehozva ezért főleg az aktív elemek a szignifikánsak a konverzió során, tehát leképzés során az XML validációhoz szükséges statikus elemeket ignoráljuk.  Az alábbi elemeknek feleltetünk meg egy egy részhálót:
 \begin{itemize}
 
 \item \texttt{<receive>} A recieve egy megfelelő üzenet után engedi a folyamatot továbbhaladni, így várakoztatáshoz használható. A \texttt{<receive>} teljes terjedelmében:\\
@@ -693,10 +693,20 @@ Nem generál új elemet, csak a láthatósági, azaz visszacsatolási elemeket a
 \section{Elvárások az alkalmazással szemben}
 
 %TODO Itt kellene röviden áttekinteni az alkalmazással szemben támasztott követelményeket.
+Az alkalmazás legfőbb feladata egy konverzió, BPEL és Petri-háló között. Ebből adódóan minden BPEL elemet le kell tudnia kezelni, illetve az azok közti összefüggéseket feltérképezni, és az összefüggés halmazból egy petri hálót előállítani. A hálót tudni kell megjeleníteni, valamint a hálón belüli mozgásokat rajzolni, és szükségesség esetén input file-t vagy felhasználói inputot kezelni. Ha a háló nem hozható létre, akkor azt tudatnia kell,és lehetőség szerint rövid indoklással alátámasztania. 
 
 \section{Az alkalmazás felépítése}
 
 %TODO Osztály és blokkdiagramok formájában be kellene mutatni, hogy milyen fő elemekből épül fel az alkalmazás.
+Az alkalmazás logikailag a következő fő részekből áll:
+\begin{itemize}
+\item I/O module: Beolvassa az XML dokumentumot és felparseolja. Szükség esetén menti a kész hálót.
+\item Conversion module: Átkonvertálja  a beolvasott dokumentumot.
+\item Data Structure module: A saját típusú Petri elemeket kezeli, és adatszerkezeti implementációt tartalmaz. 
+\item UI talker: A UI ra illeszti a megfelelő input mezőt, az abba felvitt értéket átadja a feldolgozó egységnek.
+\item Graphics module: Az MSGL libraryre épül. Feladata a gráf rajzolása és megjelenítése animációval együtt. 
+\item Computing module: A háló animációjához végzi a szükséges számításokat és időzítéseket. 
+\end{itemize}
 
 \section{C\# implementáció}
 
