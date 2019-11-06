@@ -1084,43 +1084,50 @@ Az élek indexelése:
 \end{align*}
 
 A rendszerhez az alábbi egyenlőtlenségek kapcsolódnak:
-\begin{align*}
-&C1: Iv_0 &= 20 \\
-&C2: Iv_1 - Iv_2 &\geq 0\\
-&C3: Iv_3 - Iv_4 &\geq 0\\
-&C4: Iv_5 &\leq 25\\
-&C5: Iv_0 - Iv_1 + Iv_4 &= 0\\
-&C6: Iv_0 + Iv_4 &\leq 50\\
-&C7: Iv_0 - Iv_4 &= 0\\
-&C8: Iv_2 - Iv_3 - Iv_5 &= 0\\
-&C9: Iv_2 &\leq 50\\
-&C10: Iv_3 - Iv_5 &= 0
-\end{align*}
+
+\begin{center}
+\begin{tabular}{rll}
+$C_1$ &: $Iv_0$ &$= 20$ \\
+$C_2$ &: $Iv_1 - Iv_2$ &$\geq 0$\\
+$C_3$ &: $Iv_3 - Iv_4$ &$\geq 0$\\
+$C_4$ &: $Iv_5$ &$\leq 25$\\
+$C_5$ &: $Iv_0 - Iv_1 + Iv_4$ &$= 0$\\
+$C_6$ &: $Iv_0 + Iv_4 $&$\leq 50$\\
+$C_7$ &: $Iv_0 - Iv_4 $&$= 0$\\
+$C_8$ &: $Iv_2 - Iv_3 - Iv_5$&$= 0$\\
+$C_9$ &: $Iv_2 $&$\leq 50$\\
+$C_{10}$ &: $Iv_3 - Iv_5 $&$= 0$
+\end{tabular}
+\end{center}
+
 A kapcsolódó célfüggvény:
 $$1\cdot Iv_1 + -1\cdot Iv_2 + 1\cdot Iv_3 + -1\cdot Iv_4\Rightarrow \min$$
 
 Az LP feladat megoldható és a kapott megoldás:
-\begin{align*}
-&Iv_0 &: 20.0\\
-&Iv_1 &: 40.0\\
-&Iv_2 &: 40.0\\
-&Iv_3 &: 20.0\\
-&Iv_4 &: 20.0\\
-&Iv_5 &: 20.0\\
-&Cost &= 0.0
-\end{align*}
-
+\begin{center}
+\begin{tabular}{rll}
+&$Iv_0$ &: $20.0$\\
+&$Iv_1$ &: $40.0$\\
+&$Iv_2$ &: $40.0$\\
+&$Iv_3$ &: $20.0$\\
+&$Iv_4$ &: $20.0$\\
+&$Iv_5$ &: $20.0$\\
+&$Cost$ & $= 0.0$
+\end{tabular}
+\end{center}
 Tehát a mintarendszerben nincs szükség belső pufferre. 
 Ha lecsökkentjük a második tranzíció folyamerősségét, az akkor nem kapunk érvényes megoldást. \\
 Infeasible
-\begin{align*}
-&Iv_0 &: 10.0\\
-&Iv_1 &: 20.0\\
-&Iv_2 &: 20.0\\
-&Iv_3 &: 10.0\\
-&Iv_4 &: 10.0\\
-&Iv_5 &: 10.0
-\end{align*}
+\begin{center}
+\begin{tabular}{rll}
+&$Iv_0$ &: $10.0$\\
+&$Iv_1$ &: $20.0$\\
+&$Iv_2$ &: $20.0$\\
+&$Iv_3$ &: $10.0$\\
+&$Iv_4$ &: $10.0$\\
+&$Iv_5$ &: $10.0$
+\end{tabular}
+\end{center}
 \chapter{Összegzés}
 
 %TODO Leírni a dolgozatban elért eredményeket, és a további terveket!
