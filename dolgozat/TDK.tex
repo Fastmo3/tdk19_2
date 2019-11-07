@@ -400,11 +400,10 @@ Az elemzések során az alábbi főbb tulajdonságok elemzésére szoktak kitér
 %TODO Ide kellene felsorolni, és részletesen leírni, hogy a BPEL egyes elemeinek milyen Petri-háló feleltethető meg.
 
 %TODO Megnézni, hogy az egyes elemek esetében milyen alternatívák lennének a leképzésre!
-
+\section{A leképzés menete}
 A leképzéskor elsődlegesen az aktivitás elemei kerülnek a figyelem középpontjába, a séma és különböző definíciók csak másodlagos helyet kapnak. Ez azért lényeges, mert a séma nem egy dinamikus folyamatot ír le, hanem az adott folyamat és eleminek tulajdonságát. Mivel a Petri-háló egy folyamat személtetésére lett létrehozva ezért főleg az aktív elemek a szignifikánsak a konverzió során, tehát leképzés során az XML validációhoz szükséges statikus elemeket ignoráljuk.  Az alábbi elemeknek feleltetünk meg egy egy részhálót:
-\begin{itemize}
-
-\item \texttt{<receive>} A recieve egy megfelelő üzenet után engedi a folyamatot továbbhaladni, így várakoztatáshoz használható. A \texttt{<receive>} teljes terjedelmében:\\
+\section{\texttt{<receive>}}
+\texttt{<receive>} A recieve egy megfelelő üzenet után engedi a folyamatot továbbhaladni, így várakoztatáshoz használható. A \texttt{<receive>} teljes terjedelmében:\\
 \begin{verbatim}
 <receive partnerLink="NCName"
    portType="QName"?
@@ -423,7 +422,9 @@ A leképzéskor elsődlegesen az aktivitás elemei kerülnek a figyelem középp
 </receive>
 \end{verbatim}
 A hálóban ezt egy tranzicióval könnyedén megoldhatjuk, hisz csak egy specifikus msg token kell a továbblépéshez, és a többit addig az előző helyen parkoltatja. 
-\item \texttt{<reply>} A reply egy üzenetküldő elem, ami \texttt{<receive>; <onMessage>;<onEvent>} események után léphet akcióba. 
+
+\section{\texttt{<reply>}}
+\texttt{<reply>} A reply egy üzenetküldő elem, ami \texttt{<receive>; <onMessage>;<onEvent>} események után léphet akcióba. 
 \begin{verbatim}
 <reply partnerLink="NCName"
    portType="QName"?
@@ -443,7 +444,8 @@ A hálóban ezt egy tranzicióval könnyedén megoldhatjuk, hisz csak egy specif
 \end{verbatim}
 A lekezelése az előző példával analóg módon, annyi különbséggel, hogy a tokenek nem parkolnak, hanem tovább mennek és a tranzíció csak akkor generál új tokent ha üzenetet kap egy ágról.
 
-\item \texttt{<invoke>} Egy Bpel vagy épp egy webszolgáltatás meghívására szolgál és definiálja a szolgáltatás feladatát is. 
+\section{\texttt{<invoke>}}
+\texttt{<invoke>} Egy Bpel vagy épp egy webszolgáltatás meghívására szolgál és definiálja a szolgáltatás feladatát is. 
 \begin{verbatim}
 <invoke partnerLink="NCName"
    portType="QName"?
@@ -478,7 +480,8 @@ A lekezelése az előző példával analóg módon, annyi különbséggel, hogy 
 \end{verbatim}
 %TODO ebben nem vbagyok biztos hogy hogy lehet. Átad egy start tokent egy részhálónak??
 
-\item \texttt{<assign>} Egy változó értékadására szolgáló esemény. Ellentétben egy imperatív értékadással egy assign blokkban bármennyi értékadás, másolás történhet, amíg azt a kliens kezelni tudja, így logikailag egy egységbe zárja a műveleteket.  
+\section{\texttt{<assign>}}
+\texttt{<assign>} Egy változó értékadására szolgáló esemény. Ellentétben egy imperatív értékadással egy assign blokkban bármennyi értékadás, másolás történhet, amíg azt a kliens kezelni tudja, így logikailag egy egységbe zárja a műveleteket.  
 \begin{verbatim}
 <assign validate="yes|no"? standard-attributes>
    standard-elements
@@ -495,13 +498,15 @@ A lekezelése az előző példával analóg módon, annyi különbséggel, hogy 
 </assign>
 \end{verbatim}
 Az assign nagyon egszerűen átírható egy tranzicióra ami a megfelelő tokenek színét módosítja. 
-\item \texttt{<validate>} Egy sémára validálja az XML (BPEL) file-t. 
+
+\section{\texttt{<validate>}}
+\texttt{<validate>} Egy sémára validálja az XML (BPEL) file-t. 
 \begin{verbatim}
 <validate variables="BPELVariableNames" standard-attributes>
    standard-elements
 </validate>
 \end{verbatim}
-\item \texttt{<throw>}Egy rész processzen belül fault generálására szolgál. 
+\texttt{<throw>}Egy rész processzen belül fault generálására szolgál. 
 \begin{verbatim}
 <throw faultName="QName"
    faultVariable="BPELVariableName"?
@@ -511,7 +516,8 @@ Az assign nagyon egszerűen átírható egy tranzicióra ami a megfelelő tokene
 \end{verbatim}
 Nagyon egyszerűen egy fault tokent generáló tranzició komponens. Explicit hálórésze nincs, hanem a megfelelő inputtokenek megléte vagy hiánya generálja egy tranzició során. 
 
-\item \texttt{<wait>} Időre vonatkoztatva várakoztat. Például 5000 tick vagy 14:00:23 (hh:mm:ss)
+\section{\texttt{<wait>}}
+\texttt{<wait>} Időre vonatkoztatva várakoztat. Például 5000 tick vagy 14:00:23 (hh:mm:ss)
 \begin{verbatim} 
 <wait standard-attributes>
    standard-elements
@@ -523,21 +529,27 @@ Nagyon egyszerűen egy fault tokent generáló tranzició komponens. Explicit h�
 </wait>
 \end{verbatim}
 Megadható egy részhálóval ami valójában egy oszcillátor és a megfelelő iteráció után folytat tokent küld. 
-\item \texttt{<empty>} No-op (no operations) event szinkronizációra szolgál.
+
+\section{\texttt{<empty>}}
+\texttt{<empty>} No-op (no operations) event szinkronizációra szolgál.
 \begin{verbatim}
 <empty standard-attributes>
    standard-elements
 </empty>
 \end{verbatim}
 Beiktatható egy semleges tranzició és hely.
-\item \texttt{<sequence>} Sorozatot ad meg.
+
+\section{\texttt{<sequence>} }
+\texttt{<sequence>} Sorozatot ad meg.
 \begin{verbatim}
 <sequence standard-attributes>
    standard-elements
    activity+
 </sequence>
 \end{verbatim} Egyszerűen csak tranziciók és helyek összefűzése. 
-\item \texttt{<if>} Standard kétirányú elágazás. Logikai XPATH kifejezést vár. 
+
+\section{\texttt{<if>}}
+\texttt{<if>} Standard kétirányú elágazás. Logikai XPATH kifejezést vár. 
 \begin{verbatim}
 <if standard-attributes>
    standard-elements
@@ -553,7 +565,9 @@ Beiktatható egy semleges tranzició és hely.
 </if>
 \end{verbatim}
 Egy tranzició, mely tokenek függvényében más felé küldi tovább, vagy generál tokeneket. Analóg módon egy Swithc Case elágazás is definiálható vele.
-\item \texttt{<while>} While loop. Végre hajt amíg az iterációs feltétel igaznak értékelődik ki. 
+
+\section{\texttt{<while>}}
+\texttt{<while>} While loop. Végre hajt amíg az iterációs feltétel igaznak értékelődik ki. 
 \begin{verbatim}
 <while standard-attributes>
    standard-elements
@@ -562,7 +576,9 @@ Egy tranzició, mely tokenek függvényében más felé küldi tovább, vagy gen
 </while>
 \end{verbatim}
 Egy tranzició, mely token függvényében a folyamat egy korábbi pontjára csatol vissza, vagy ép egy későbbire, a feltétel hamis logikai állapota esetén. A feltétel persze egy színes token jelenléte, vagy tokenek száma is lehet. 
-\item \texttt{<repeatUntil>} Egy do-while ciklusnak feleltethető annyi kivétellel, hogy akkor enged tovább, ha a feltétel igaz. 
+
+\section{\texttt{<repeatUntil>}}
+\texttt{<repeatUntil>} Egy do-while ciklusnak feleltethető annyi kivétellel, hogy akkor enged tovább, ha a feltétel igaz. 
 \begin{verbatim}
 <repeatUntil standard-attributes>
    standard-elements
@@ -571,7 +587,9 @@ Egy tranzició, mely token függvényében a folyamat egy korábbi pontjára csa
 </repeatUntil>
 \end{verbatim}
 Az előzővel analóg módon megadható
-\item \texttt{<forEach>} A kezdeti változó és a végváltozó különbsége +1 szer iteráltatja a gyerek elemet. Megadható párhuzamos feldolgozás is. Egy Complete condition segítségével megadható egy break utasítás ami kilép a forEachből. 
+
+\section{\texttt{<forEach>}}
+\texttt{<forEach>} A kezdeti változó és a végváltozó különbsége +1 szer iteráltatja a gyerek elemet. Megadható párhuzamos feldolgozás is. Egy Complete condition segítségével megadható egy break utasítás ami kilép a forEachből. 
 \begin{verbatim}
 <forEach counterName="BPELVariableName" parallel="yes|no"
    standard-attributes>
@@ -591,7 +609,9 @@ Az előzővel analóg módon megadható
    <scope ...>...</scope>
 </forEach>
 \end{verbatim} Egyszerű loop utasítás, azonban párhuzamosítás esetén a részhálóból megfelelő példányszámot generáltatunk. 
-\item \texttt{<pick>}Üzenetek várására vagy timeout eseményre figyel. Ezek bármelyike a szubprocessz végrehajtásához vezet. 
+
+\section{\texttt{<pick>}}
+\texttt{<pick>}Üzenetek várására vagy timeout eseményre figyel. Ezek bármelyike a szubprocessz végrehajtásához vezet. 
 \begin{verbatim}
 <pick createInstance="yes|no"? standard-attributes>
    standard-elements
@@ -618,7 +638,9 @@ Az előzővel analóg módon megadható
    </onAlarm>
 </pick>
 \end{verbatim}
-\item \texttt{<flow>} konkurens elemek deklarálására szolgál. Linkek segítségével megadható függőségi viszony a gyerekek között. 
+
+\section{\texttt{<flow>}}
+\texttt{<flow>} konkurens elemek deklarálására szolgál. Linkek segítségével megadható függőségi viszony a gyerekek között. 
 \begin{verbatim}
 <flow standard-attributes>
    standard-elements
@@ -627,8 +649,10 @@ Az előzővel analóg módon megadható
    </links>
    activity+
 </flow>
-\end{verbatim} A gyerek elemek scope-ját lehet vele szabályozni.
-\item \texttt{<scope>}
+\end{verbatim} 
+
+\section{\texttt{<scope>}}
+\texttt{<scope>} A gyerek elemek scope-ját lehet vele szabályozni.
 \begin{verbatim}
 <scope isolated="yes|no"? exitOnStandardFault="yes|no"?
    standard-attributes>
@@ -661,25 +685,33 @@ Az előzővel analóg módon megadható
 </scope>
 \end{verbatim}
 Nem generál új elemet, csak a láthatósági, azaz visszacsatolási elemeket adja meg. 
-\item \texttt{<compensateScope>}
+
+\section{\texttt{<compensateScope>}}
+\texttt{<compensateScope>}
 \begin{verbatim}
 <compensateScope target="NCName" standard-attributes>
    standard-elements
 </compensateScope>
 \end{verbatim}
-\item \texttt{<compensate>}
+
+\section{\texttt{<compensate>}}
+\texttt{<compensate>}
 \begin{verbatim}
 <compensate standard-attributes>
    standard-elements
 </compensate>
 \end{verbatim}
-\item \texttt{<rethrow>}
+
+\section{\texttt{<rethrow>}}
+\texttt{<rethrow>}
 \begin{verbatim}
 <rethrow standard-attributes>
    standard-elements
 </rethrow>
 \end{verbatim}
-\item \texttt{<extensionActivity>}
+
+\section{\texttt{<extensionActivity>}}
+\texttt{<extensionActivity>}
 \begin{verbatim}
 <extensionActivity>
    <anyElementQName standard-attributes>
@@ -687,7 +719,7 @@ Nem generál új elemet, csak a láthatósági, azaz visszacsatolási elemeket a
    </anyElementQName>
 </extensionActivity>
 \end{verbatim}
-\end{itemize}
+
 
 \chapter{Szimulációs keretrendszer}
 
