@@ -1,0 +1,399 @@
+\chapter{A hálón végezhető elemzések}
+\section{Háló korlátosság és puffer kapacitási ellenőrzés}
+
+A háló egy adott helye akkor tekinthető korlátos (bounded) helynek, ha bármely jelölésnél a tokenek száma az adott helynél nem megy egy adott korlát fölé. A Petri háló korlátos, ha minden helye korlátos hely.
+A háló korlátossága az egyik leggyakoribb és legfontosabb minőségi jellemzője a Petri hálóknak. 
+
+A háló alap tulajdonságainak , beleértve a korlátosságának az elemzésére több módszer is létezik, melyek közül kiemelhető a
+\begin{itemize}
+\item komponens / elérhetőségi gráf elemzése (SCC)
+\item komponens / elérhetőségi gráf elemzése (SCC)
+\item dekompozíciós módszerek 
+\end{itemize}
+
+A mátrix reprezentáció esetén transzformációs mátrixok segítségével írják fel a Petri háló dinamikáját. Az alapstruktúra az ú.n. incidencia M mátrixban kerül megadásra, melynek elemei az alábbi jelentéssel bírnak: $A_{ij}=a^+_{ij}-a^-_{ij}$, ahol 
+\begin{itemize}
+\item $a^+_{ij}: $ az élerősség az i. tranzícióból a j. kimeneti hely felé
+\item $a^-_{ij}$ az élerősség az i. tranzícióhoz a j. bemeneti hely felől.
+\end{itemize}
+
+A mátrix alapvetően a tokenek számának a változását mutatja az egyes tranzició átmenetek esetére. A  Petri háló működési alapegyenlete a következő alakban adható meg: 
+$$M_k=M_{k-1}+ Au_k$$
+ahol $M_k$ jelöli a háló markereinek (tokenek) státuszát a $k.$ lépésben. Az $u$ vektor a helyek tüzelési státuszt írja le. 
+
+A fenti modellen alapuló elérhetőség vizsgálatok felhasználhatóak a korlátosság elemzésére is. LINK!% [ Petri Nets: Properties, Analysis and Appl kat ions, http://people.disim.univaq.it/adimarco/teaching/bioinfo15/paper.pdf]  
+A kapcsolódó  egyenletek hatékony,. lineáris programozási megoldását vizsgálta a LINK!  
+%[JEAN B. LASSERRE PHILIPPE MAHEY Using linear programming in Petri net analysis :http://www.numdam.org/article/RO_1989__23_1_43_0.pdf] 
+dolgozat is.
+
+%TODO itt van egy kép, nem tudom lehet e direktben cite-olni????
+
+\section{Saját modell}
+
+Modellünkben korlátosságnak egy folyam-gráf megközelítését dolgoztuk ki.  A hálóban a következő típusú helyeket definiáljuk:
+\begin{itemize}
+\item forrás hely
+\item nyelő hely
+\item köztes hely
+\end{itemize}
+Feltesszük, hogy csak a köztes helyeken lehet tokeneket tárolni, csak ott vannak pufferek. A hálóban az élekhez egy $I_x$ token áramlás erősséget definiálunk, ahol x jelöli az él indexét. A forrás helyekhez egy $Q_x$ forrás erősség indexet adunk meg. A hálóban az alábbi kapacitás korlátokat vezetjük be:
+\begin{itemize}
+\item $C_x:$ az x. tranzíció maximális erőssége 
+\item $C_y:$ az y. nyelő maximális folyam erőssége 
+\end{itemize}
+
+A tranzícióknál a bemenő élek vonatkozásában kétféle működési módot értelmezünk:
+\begin{itemize}
+\item AND-mód: akkor van tüzelés, ha minden bejövő élnél megvan az al elvárt tokenszám, van szinkron
+\item OR-mód: akkor van tüzelés, ha megjelenik valamely bemeneten egy token, nincs szinkron  
+\end{itemize}
+A hálóban az alábbi megkötések élnek a folyamerősségekre
+\begin{itemize}
+\item forrás helyek esetén: $\sum_y I_y=Q_x$ ($y$: kimenő élek)
+\item nyelő helyek esetén: $\sum_y I_y \leq C_x$ ($y$: bejövő élek)
+\item belső helyek esetén: 
+\item$\sum_{y(ki)} I_y\leq \sum_{y(be)} I_y$
+\item tranziciók esetén: 
+\begin{itemize}
+\item $\sum_y I_y\leq C_x$ ($y:$ bejövő élek)
+\item $\sum_{y(ki)} I_y = \sum_{y(be)} I_y$
+\item $\forall$ kimenő $x,y$ élre $I_x=I_y$
+\end{itemize}
+\end{itemize}
+az AND típusú tranzakciók esetén még ezen felül teljesül, hogy $\forall$ bejövő $x,y$ élre:\\
+$I_x = I_y$.
+
+Az egyes belső helyeken a pufferbe áramló tokenek  eredő intentitása:
+
+$$F= \sum_{x(\text{belső hely})} \left( \sum_{y(\text{x bejövő él})} I_y - \sum_{y(\text{x kimenő él})} I_y \right)$$
+Az F függvény 0 értéke esetén nincs szükség belső pufferre.
+
+A fenti feladatot egy LP programozási feladatnak is tekinthető, ahol a változók az élek $I_x$ nem negatív intenzitásai és a célfüggvény:
+$$F\Rightarrow \min$$ alakú.
+
+\section{Számítási implementációja}
+\begin{verbatim}
+import networkx as nx
+import matplotlib.pyplot as plt
+import pulp as p
+
+class cl_place:
+    def __init__(self):
+        self.id = -1
+        self.inputs = []
+        self.outputs = []
+        self.tokens = []
+        self.Q = 0
+        self.border = 0
+
+
+class cl_transition:
+    def __init__(self):
+        self.id = -1
+        self.inputs = []
+        self.outputs = []
+        self.C = 0
+        self.mode = ' '
+
+class cl_link:
+    def __init__(self):
+        self.id = -1
+        self.input = -1
+        self.output = -1
+        self.alfa = 0
+        self.inner = 0
+
+class cl_petri_net:
+    def __init__(self,Plist,Tlist, Elist):
+        self.NP = len(Plist)
+        self.NT = len(Tlist)
+        self.NN = self.NP + self.NT
+            
+        self.places = []
+        for i in range(self.NP):
+            po = cl_place()
+            po.id = i + 1
+            po.Q = Plist[i]
+            if Plist[i] > 0:
+                po.border = 1
+            if Plist[i] < 0:
+                po.border = 2            
+            self.places.append(po)
+            
+       
+        self.transitions = []
+        for i in range(len(Tlist)):
+            tr = cl_transition()
+            tr.id = self.NP + 1 + i
+            tr.C = Tlist[i][0]
+            tr.mode = Tlist[i][1]
+            self.transitions.append(tr)
+        
+        self.nodes_dict = dict()
+        for pp in self.places:
+            self.nodes_dict[pp.id] = pp
+        for tt in self.transitions:
+            self.nodes_dict[tt.id] = tt
+        
+        self.links = []
+        for i in range(len(Elist)):
+            ll = cl_link()
+            ll.id = i
+            ll.input = Elist[i][0]
+            ll.output = Elist[i][1]
+            if ll.input > self.NP:
+                db = 0
+                for j in range(len(Elist)):
+                    if Elist[j][0] == ll.input:
+                        db = db + 1
+                ll.alfa = db
+                ll.inner = 1
+                for j in range(len(self.places)):
+                    if self.places[j].id == ll.output:
+                        if self.places[j].border != 0:
+                            ll.inner = 0
+            else:
+                db = 0
+                for j in range(len(Elist)):
+                    if Elist[j][1] == ll.output:
+                        db = db + 1
+                ll.alfa = db
+                ll.inner = 1
+                for j in range(len(self.places)):
+                    if self.places[j].id == ll.input:
+                        if self.places[j].border != 0:
+                            ll.inner = 0
+            
+            self.links.append(ll)
+            print (ll.id," : ", ll.input,"->" , ll.output, " : ", ll.alfa)
+        
+        self.edges_dict = dict()
+        for ee in self.links:
+            self.edges_dict[ee.id] = ee
+        
+        for pp in self.places:
+            for ee in self.links:
+                if ee.input == pp.id:
+                    pp.outputs.append(ee.id)
+                if ee.output == pp.id:
+                    pp.inputs.append(ee.id)
+        for tr in self.transitions:
+            for ee in self.links:
+                if ee.input == tr.id:
+                    tr.outputs.append(ee.id)
+                if ee.output == tr.id:
+                    tr.inputs.append(ee.id)
+    
+    
+    def draw_net(self):
+        graph = []
+        for ll in self.links:
+            graph.append((ll.input, ll.output))
+        ncols = []
+        mp = 0
+        for ll in self.links:
+            fnd = 0
+            for i in range(mp):
+                if ncols[i] == ll.input:
+                    fnd = 1
+            if fnd == 0:
+                ncols.append(ll.input)
+                mp = mp + 1
+            fnd = 0
+            for i in range(mp):
+                if ncols[i] == ll.output:
+                    fnd = 1
+            if fnd == 0:
+                ncols.append(ll.output)
+                mp = mp + 1
+        for i in range (len(ncols)):
+            if ncols[i] > self.NP:
+                if self.nodes_dict[ncols[i]].mode == 'A':
+                    ncols[i] = 'lime'
+                else:
+                    ncols[i] = 'olivedrab'
+            else:
+                ncols[i] = 'gold'
+            
+        labs = dict()
+        for x in self.places:
+            labs[x.id] = str(x.id) + ":" + str(x.Q)
+        for x in self.transitions:
+            labs[x.id] = str(x.id) + ":" + str(x.C)
+
+        G=nx.DiGraph()
+        for edge in graph:
+            G.add_edge(edge[0], edge[1])
+        graph_pos = nx.circular_layout(G)
+        #graph_pos = nx.spring_layout(G)
+    
+        nx.draw_networkx_nodes(G, graph_pos,node_size=800, node_color = ncols, node_shape = 's' )
+        nx.draw_networkx_edges(G, graph_pos,arrowsize = 30)
+        nx.draw_networkx_labels(G, graph_pos, font_size=12, font_family='sans-serif',
+        labels = labs)
+        plt.show()
+
+    def test_cap (self):
+        prob = p.LpProblem("Petri net Problem",p.LpMinimize)
+
+        tr_items = [e.id for e in self.links]
+        tr_vars = p.LpVariable.dicts("Iv",tr_items,lowBound=0,cat='Continuous')
+        print (tr_vars)
+        
+        costs = dict()
+        for i in tr_items:
+            costs[i] = 0
+        for pp in self.places:
+            if pp.border == 0:
+                for ll in pp.inputs:
+                    costs[ll] = costs[ll] + 1
+                for ll in pp.outputs:
+                    costs[ll] = costs[ll] - 1
+
+        prob += p.lpSum([costs[i]*tr_vars[i] for i in tr_items])
+        #print ("costs")
+        #print (costs)
+        
+        #print ("weights")
+        for pl in self.places:
+            wgts = dict()
+            cnts = 0
+            for i in tr_items:
+                wgts[i] = 0
+            #print (wgts)
+            #print (cnts)
+            if pl.border == 0:
+                for e in pl.inputs:
+                    wgts[e] = wgts[e] + 1
+                for e in pl.outputs:
+                    wgts[e] = wgts[e] - 1
+                cnts = 0
+                prob += p.lpSum([wgts[i]*tr_vars[i] for i in tr_items]) >= cnts
+            if pl.border == 1:
+                for e in pl.outputs:
+                    wgts[e] = wgts[e] + 1
+                cnts = pl.Q
+                prob += p.lpSum([wgts[i]*tr_vars[i] for i in tr_items]) == cnts
+            if pl.border == 2:
+                for e in pl.inputs:
+                    wgts[e] = wgts[e] + 1
+                cnts = -pl.Q
+                prob += p.lpSum([wgts[i]*tr_vars[i] for i in tr_items]) <= cnts
+
+        for tr in self.transitions:
+            wgts = dict()
+            cnts = 0
+            for i in tr_items:
+                wgts[i] = 0
+            for e in tr.inputs:
+                wgts[e] = wgts[e] + 1
+            for e in tr.outputs:
+                wgts[e] = wgts[e] - 1
+            prob += p.lpSum([wgts[i]*tr_vars[i] for i in tr_items]) == 0
+            
+            for i in tr_items:
+                wgts[i] = 0
+            for e in tr.inputs:
+                wgts[e] = wgts[e] + 1
+            cnts = tr.C
+            prob += p.lpSum([wgts[i]*tr_vars[i] for i in tr_items]) <= cnts
+
+            if tr.mode == 'A':
+                for e in range(1,len(tr.inputs)):
+                    e1 = tr.inputs[0]
+                    e2 = tr.inputs[e]
+                    for i in tr_items:
+                        wgts[i] = 0
+                    wgts[e1] =  1
+                    wgts[e2] =  -1
+                    prob += p.lpSum([wgts[i]*tr_vars[i] for i in tr_items]) == 0
+                for e in range(1,len(tr.outputs)):
+                    e1 = tr.outputs[0]
+                    e2 = tr.outputs[e]
+                    for i in tr_items:
+                        wgts[i] = 0
+                    wgts[e1] =  1
+                    wgts[e2] =  -1
+                    prob += p.lpSum([wgts[i]*tr_vars[i] for i in tr_items]) == 0
+            if tr.mode == 'O':
+                for e in range(1,len(tr.outputs)):
+                    e1 = tr.outputs[0]
+                    e2 = tr.outputs[e]
+                    for i in tr_items:
+                        wgts[i] = 0
+                    wgts[e1] =  1
+                    wgts[e2] =  -1
+                    prob += p.lpSum([wgts[i]*tr_vars[i] for i in tr_items]) == 0
+                    
+            
+        print ("----------------")
+        print (prob)
+        prob.solve()
+        print ("===============")
+        print (p.LpStatus[prob.status])
+        QV = 0
+        for var in tr_vars:
+            QV = QV + tr_vars[var].varValue*costs[var]
+            print (tr_vars[var],":",tr_vars[var].varValue)
+        print ("Cost=", QV)
+\end{verbatim}
+\section{Mintafeladat}
+Vegyünk egy 4 helyből és 2 tranzícióból álló rendszert. A helyekből egy nyelő, egy forrás és kettő belső hely. A rendszerben 6 él van az ábrán megadott módon.  A gráfban a sárga elem a helyeket, zöld a tranzíciókat jelöli. A csomópont elemben az első jel a hely kódja, a második a kapcsolódó kapacitás érték. A modellben a kisebb indexű tranzíció AND tulajdonságú, a másik OR tulajdonságú. 
+
+A rendszerben 6 (nem negatív) változó jelenik meg:  $\{0: Iv_0, 1: Iv_1, 2: Iv_2, 3: Iv_3, 4: Iv_4, 5: Iv_5\}$
+
+Az élek indexelése:
+\begin{align*}
+0  :  1 \rightarrow 5  \\
+1  :  5 \rightarrow 2  \\
+2  :  2 \rightarrow 6  \\
+3  :  6 \rightarrow 3  \\
+4  :  3 \rightarrow 5  \\
+5  :  6 \rightarrow 4 
+\end{align*}
+
+A rendszerhez az alábbi egyenlőtlenségek kapcsolódnak:
+
+\begin{center}
+\begin{tabular}{rll}
+$C_1$ &: $Iv_0$ &$= 20$ \\
+$C_2$ &: $Iv_1 - Iv_2$ &$\geq 0$\\
+$C_3$ &: $Iv_3 - Iv_4$ &$\geq 0$\\
+$C_4$ &: $Iv_5$ &$\leq 25$\\
+$C_5$ &: $Iv_0 - Iv_1 + Iv_4$ &$= 0$\\
+$C_6$ &: $Iv_0 + Iv_4 $&$\leq 50$\\
+$C_7$ &: $Iv_0 - Iv_4 $&$= 0$\\
+$C_8$ &: $Iv_2 - Iv_3 - Iv_5$&$= 0$\\
+$C_9$ &: $Iv_2 $&$\leq 50$\\
+$C_{10}$ &: $Iv_3 - Iv_5 $&$= 0$
+\end{tabular}
+\end{center}
+
+A kapcsolódó célfüggvény:
+$$1\cdot Iv_1 + -1\cdot Iv_2 + 1\cdot Iv_3 + -1\cdot Iv_4\Rightarrow \min$$
+
+Az LP feladat megoldható és a kapott megoldás:
+\begin{center}
+\begin{tabular}{rll}
+&$Iv_0$ &: $20.0$\\
+&$Iv_1$ &: $40.0$\\
+&$Iv_2$ &: $40.0$\\
+&$Iv_3$ &: $20.0$\\
+&$Iv_4$ &: $20.0$\\
+&$Iv_5$ &: $20.0$\\
+&$Cost$ & $= 0.0$
+\end{tabular}
+\end{center}
+Tehát a mintarendszerben nincs szükség belső pufferre. 
+Ha lecsökkentjük a második tranzíció folyamerősségét, az akkor nem kapunk érvényes megoldást. \\
+Infeasible
+\begin{center}
+\begin{tabular}{rll}
+&$Iv_0$ &: $10.0$\\
+&$Iv_1$ &: $20.0$\\
+&$Iv_2$ &: $20.0$\\
+&$Iv_3$ &: $10.0$\\
+&$Iv_4$ &: $10.0$\\
+&$Iv_5$ &: $10.0$
+\end{tabular}
+\end{center}
