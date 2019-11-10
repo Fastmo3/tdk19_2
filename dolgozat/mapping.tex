@@ -4,7 +4,23 @@
 
 %TODO Megnézni, hogy az egyes elemek esetében milyen alternatívák lennének a leképzésre!
 \section{A leképzés menete}
-A leképzéskor elsődlegesen az aktivitás elemei kerülnek a figyelem középpontjába, a séma és különböző definíciók csak másodlagos helyet kapnak. Ez azért lényeges, mert a séma nem egy dinamikus folyamatot ír le, hanem az adott folyamat és eleminek tulajdonságát. Mivel a Petri-háló egy folyamat személtetésére lett létrehozva ezért főleg az aktív elemek a szignifikánsak a konverzió során, tehát leképzés során az XML validációhoz szükséges statikus elemeket ignoráljuk.  Az alábbi elemeknek feleltetünk meg egy egy részhálót:
+A BPEL nyelv az egymással együttműködő modulok működését szimulálja. A BPEL  modellben a folyamat lépéseit tevékenységnek \textsl{activity} nevezzük. A tevékenységek lehetnek elemiek és összetettek. Tipikus elemi tevékenységek:
+\begin{itemize}
+\item más funkció meghívása
+\item üzenet küldés / fogadás
+\item változók módosítása
+\item várakozás, szinkronizálás
+\end{itemize}
+Az elemi tevékenységekből összetett folyamatok építhetőek fel az alábbi struktúra elemek segítségével:
+\begin{itemize}
+\item szekvencia
+\item párhuzamosítás
+\item ciklus
+\end{itemize}
+
+A BPEL szabvány tevékenység készletének bemutatásánál csak a legfontosabb elemekre térünk most ki. A szabvány részletei 
+[http://docs.oasis-open.org/wsbpel/2.0/OS/wsbpel-v2.0-OS.html]  helyről érhetőek el. 
+
 \section{\texttt{<receive>}}
 \texttt{<receive>} A recieve egy megfelelő üzenet után engedi a folyamatot továbbhaladni, így várakoztatáshoz használható. A \texttt{<receive>} teljes terjedelmében:\\
 \begin{verbatim}

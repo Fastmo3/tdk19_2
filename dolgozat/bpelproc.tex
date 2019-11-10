@@ -1,23 +1,51 @@
 %TODO Add bpel control elements, 10 example from core std /w pics, annot, and bpel desgn pictograms. Non core elements only w/ annotation
 
 \chapter{A BPEL és folyamatainak bemutatása} 
+A BPEL szabvány alapjai a 2000-es évek közepén jöttek létre az üzleti folyamatok szabványos leírására elsősorban a Web szolgáltatás alapú környezetre fókuszálva \cite{andrews2003business}. A nyelv célja definiálni az  egyes WS folyamatok vezérlését, koordinálását a kívánt üzleti logika megvalósítására.  A BPEL modell magja  a folyamatok leírására szolgál, melyekhez együttműködő partnereket szimbolizáló modulok kapcsolódhatnak. A folyamaton belüli lépéseket, végrehajtási algoritmust az aktivitási elemekkel írhatjuk le. A folyamatokhoz változók is rendelhetőek, melyek a kapcsolódó adatkezelést reprezentálják. Az egyes processz modulok üzenetváltással kommunikálhatnak egymással.   
 
-A BPEL (Buisness Process Execution Language)üzleti folyamatok végrehajtó nyelve \cite{saraswathi2013oracle}.
-Az OASIS által kezelt XML alapú szabványt használ. 
-A dokumentum felépítésében egy XML dokumentum, mely a WS-BPEL szabvány szerint validált. A BPEL programok szerkezetét célszerű egy mintával áttekinteni, a jobb megértéshez. %TODO link: http://docs.oasis-open.org/wsbpel/2.0/OS/wsbpel-v2.0-OS.html chapter 5 section 1
-Vegyük a következő példát.  \textsl{Adott egy online rendelést felvevő cég. A cég egy automata segítségével generál számlákat A számla az ár kiszámítása, a futár kiválasztása, és a szükséges termelés ütemezése után kerül kiállításra.} A lépéseket az alábbi ábra mutatja be: %TODO insert fig1.png 
-Az ábrán a téglalapok egy rész processzt jelentenek. Az egy blokkban különállóak pedig konkurens proceszeket. A szaggatott vonal szekvenciát jelöl, míg a teli/sima pedig vezérlő linkek, a konkurens processzek szinkronizációját, várakoztatását lehet velük megoldani. Az ábra nem képez átíratot, csak mint egy standard érthető vizualizáció segíti a megértést. 
+A BPEL nyelv a WS környezetből adódóan szorosan kötődik az XML alapú adattároláshoz. A BPEL modell XM állományként áll elő, melyben az egyes séma megkötéseket az XMLSchema szabvány biztosítja. Az XMLSchema nyelv lehetővé teszi az XML dokumentumok strukturális és tartalmi ellenőrzését. A sémanyelv  gazdag integritási elem készlettel rendelkezik és támogatja a típusok származtatását is. A elemi adatkezelő műveletek, szabályok és kifejezések megadásánál a XPath szabványt kell alkalmazni.  
 
-A program következő része egy WSDL szabvány ami a portot adja meg a processz számára. %TODO link to appendix
-\newpage
+A BPEL nyelv tulajdonságaival és alkalmazási lehetőségeivel számos kutatás foglalkozott már az elmúlt évtizedben. A BPEL nyelv nagy előnye a deklaratív formalizmus, mellyel nem szükséges  az egyes modulok kódjába beleégetni az üzleti szabályokat. Az elosztott környezet esetén fontos, hogy az egyes üzleti szabályok illeszthetőek, integrálhatóak és validálhatóak legyenek \cite{rosenberg2005business}.  A BPEL modell fejlesztése ezen célkitűzések teljesítésére irányult.   Több dolgozatban, mint pl \cite{ouyang2006translating}-ban a BPEL nyelv mint cél modellezési nyelv jelenik meg, s más szabvány folyamat modellezési nyelv, mint UML , BPEL-re történő konvertálását vizsgálják.   
 
+A létrehozott BPEL modellnyelv tulajdonságait és alkalmazhatóságát  aktívan vizsgáltak a 2000-es évek második felében. Ennek keretében a \cite{baresi2005towards} dolgozat az elkészített BPEL modellek dinamikus nyomkövetésére, monitorizására  mutat be hatékony algoritmusokat.  A modell főbb elágazási és szinkronizációs elemeihez kapcsolódó elemzéseket a \cite{ouyang2005wofbpel} dolgozat foglalja össze . A BPEL üzleti folyamatok magasabb szintű , a folyamat unit teszt alapú elemzésére ad javaslatot a \cite{mayer2006towards}
 
- 
- A kódban szereplő \texttt{<partnerLinks>} tartalmaz mindent (így közvetetten mindenkit) amik kapcsolatba kerül a processzel. Az elnevezés tükrözi a résztvevő partit, valamint a résztvevő feladatát, szándékát. A \texttt{<variables>} a változókat tartalmazza, míg a \texttt{<faultHandlers>} a hibakezelőket. A hibakezelés egy try-catch-finally "hibakezelőblokk" helyett az XML mentalitását tükröző módon kerül lekezelésre, a handlerek által. A kód többi része a processz standard definíciójához tartozik. A példák alapján elmondható, hogy a program a következő struktúra szerint épül fel.
-\begin{itemize}
-\item \textbf{Definíció: } a processz neve, névtere és különféle sémahívások, majd bővítmények, importok
-\item \textbf{PartnerLinkek: } A megfelelő partnerek hozzáadása attribútumokkal. 
-\item \textbf{Változók}
-\item \textbf{Hibakezelők}
-\item\textbf{Eseménykezelők}
-\end{itemize}
+A BPEL nyelv egyik gyakori alkalmazási területe a workflow rendszerek fejlesztése. Több irányban is történtek lépések, hogy  a BPEL  modell különböző workflow alkalmazási területekre alkalmazzák. Ezen kísérletek között megemlíthető a grid és tudományos  workflow folyamatok \cite{slominski2007adapting} és a mobil alkalmazások fejlesztése \cite{hackmann2006sliver} területei.  A témakörhöz kapcsolódóan megemlíthető, hogy sokan a BPEL-t tekintették az univerzális workflow leíró nyelvre, s javaslatok is születtek a BPEL központú workflow szemléletre \cite{van2008translating}. A  hazai vonatkozású fejlesztések körében kiemelhető a BPEL rendszerek formális validációjára irányuló vizsgálatok köre \cite{kovacs2008formal}. A validációs elemzések mellett a modell komplexitás meghatározására is találunk példákat a nemzetközi irodalomban  \cite{cardoso2007complexity}. 
+
+BPEL  nyelv kiterjesztésére is több dolgoztat született, mint például az elosztott rendszerekre történő kiterjesztés \cite{baresi2007towards}. A kiterjesztések körét a \cite{kopp2011classification} dolgozat foglalja össze, a publikjált kiterjesztések körét a A1 táblázat foglalja össze.
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Kritérium} & \textbf{Karakterisztika}\\
+\hline
+\multirow{8}{7em}{Cél} & Lehetőség a kiszervezésre\\
+& Rugalmasság\\
+& Funkcionalitás\\
+& Fenntarthatóság\\
+& Teljesítmény\\
+& Újrafelhasználhatóság\\
+& Robusztusság\\
+& Használhatóság\\
+\hline
+\multirow{8}{7em}{Tárgy} & Vezérlési folyam\\
+& Adatintegráció\\
+& Kifejezések és hozzárendelő utasítások\\
+& Nagy mennyiségű adat kezelése\\
+& Egyéb \\
+& Szolgáltatás társítása\\
+& Szolgáltatás meghívása\\
+& Változó hozzáférés\\
+\hline
+\multirow{3}{7em}{Munkafolyam dimenziója} & IT infrastruktúra\\
+& Processz logika\\
+& Szervezés\\
+\hline
+\multirow{6}{7em}{Helye a BPM életciklusban} & Modellezés\\
+& IT finomítás\\
+& Statikus analízis, ellenőrzés\\
+& Deployment\\
+& Munkavégzés\\
+& Megfigyelés\\
+\hline
+\end{tabular}
+\end{center}
+
