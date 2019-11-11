@@ -31,14 +31,15 @@
 \BOOKMARK [0][-]{chapter.6}{Az alkalmaz\341s implement\341ci\363ja}{}% 31
 \BOOKMARK [1][-]{section.6.1}{C\043 implement\341ci\363}{chapter.6}% 32
 \BOOKMARK [1][-]{section.6.2}{Tesztel\351s, tapasztalatok}{chapter.6}% 33
-\BOOKMARK [0][-]{chapter.7}{A h\341l\363n v\351gezheto elemz\351sek}{}% 34
-\BOOKMARK [1][-]{section.7.1}{H\341l\363 korl\341toss\341g \351s puffer kapacit\341si ellenorz\351s}{chapter.7}% 35
-\BOOKMARK [1][-]{section.7.2}{Saj\341t modell alaph\341l\363ra}{chapter.7}% 36
-\BOOKMARK [1][-]{section.7.3}{Az alkalmazott, kibov\355tett modell}{chapter.7}% 37
-\BOOKMARK [1][-]{section.7.4}{A valid\341ci\363s sz\341m\355t\341s algoritmusa}{chapter.7}% 38
-\BOOKMARK [1][-]{section.7.5}{Mintafeladat}{chapter.7}% 39
-\BOOKMARK [1][-]{section.7.6}{Elso p\351lda \374zleti folyamat}{chapter.7}% 40
-\BOOKMARK [1][-]{section.7.7}{M\341sodik p\351lda \374zleti folyamat}{chapter.7}% 41
-\BOOKMARK [0][-]{chapter.8}{\326sszegz\351s}{}% 42
-\BOOKMARK [0][-]{chapter.9}{Mell\351kletek}{}% 43
-\BOOKMARK [1][-]{section.9.1}{WSDL szabv\341ny a BPEL sz\341m\341ra}{chapter.9}% 44
+\BOOKMARK [1][-]{section.6.3}{Python implemet\341ci\363}{chapter.6}% 34
+\BOOKMARK [0][-]{chapter.7}{A h\341l\363n v\351gezheto elemz\351sek}{}% 35
+\BOOKMARK [1][-]{section.7.1}{H\341l\363 korl\341toss\341g \351s puffer kapacit\341si ellenorz\351s}{chapter.7}% 36
+\BOOKMARK [1][-]{section.7.2}{Saj\341t modell alaph\341l\363ra}{chapter.7}% 37
+\BOOKMARK [1][-]{section.7.3}{Az alkalmazott, kibov\355tett modell sz\355nezett h\341l\363ra}{chapter.7}% 38
+\BOOKMARK [1][-]{section.7.4}{A valid\341ci\363s sz\341m\355t\341s algoritmusa}{chapter.7}% 39
+\BOOKMARK [1][-]{section.7.5}{Mintafeladat}{chapter.7}% 40
+\BOOKMARK [1][-]{section.7.6}{Elso p\351lda \374zleti folyamat}{chapter.7}% 41
+\BOOKMARK [1][-]{section.7.7}{M\341sodik p\351lda \374zleti folyamat}{chapter.7}% 42
+\BOOKMARK [0][-]{chapter.8}{\326sszegz\351s}{}% 43
+\BOOKMARK [0][-]{chapter.9}{Mell\351kletek}{}% 44
+\BOOKMARK [1][-]{section.9.1}{WSDL szabv\341ny a BPEL sz\341m\341ra}{chapter.9}% 45

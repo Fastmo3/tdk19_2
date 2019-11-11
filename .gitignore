@@ -3,7 +3,6 @@
 *.bbl
 *.blg
 *.log
-*.pdf
 *.gz
 *.toc
 dolgozat/.vs/VSWorkspaceState.json
@@ -11,3 +10,5 @@ dolgozat/.vs/ProjectSettings.json
 dolgozat/.TDK.tex.swp
 dolgozat/.vs/dolgozat/v16/.suo
 dolgozat/.vs/slnx.sqlite
+*.bak
+dolgozat/TDK.synctex(busy)
