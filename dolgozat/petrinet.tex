@@ -53,11 +53,11 @@ Egy $t$ tranzíció esetén a $Var(t)$ kifejezés a tranzícióhoz rendelt vált
 Az egyes esetekhez tartozó halmazok tehát az alábbiak.
 \begin{equation*}
 Var(t)=\begin{cases}
-\{n,d\} &\text{ha } t=SendPacket, \\
-\{n,d,success\} &\text{ha } t= TransmitPacket, \\
-\{n,d,k,data\} &\text{ha } t=ReceivePacket, \\
-\{n,success\} &\text{ha } t=TrancmitAck, \\
-\{n,k\} &\text{ha }t=ReceiveAck.
+\{n,d\}, &\text{ha } t=SendPacket, \\
+\{n,d,success\}, &\text{ha } t= TransmitPacket, \\
+\{n,d,k,data\}, &\text{ha } t=ReceivePacket, \\
+\{n,success\}, &\text{ha } t=TrancmitAck, \\
+\{n,k\}, &\text{ha }t=ReceiveAck.
 \end{cases}
 \end{equation*}
 
@@ -196,11 +196,11 @@ if pl.border == 2:
     cnts = -pl.Q
     
 Init_.lpSum([wgts[i] * tr_vars[i] for i in tr_items]) <= cnts
-        for tr in self.transitions:
-            for e in tr.inputs:
-                wgts[e] = wgts[e] + 1
-            for e in tr.outputs:
-                wgts[e] = wgts[e] - 1
+for tr in self.transitions:
+    for e in tr.inputs:
+        wgts[e] = wgts[e] + 1
+    for e in tr.outputs:
+        wgts[e] = wgts[e] - 1
                 
 Init_lpSum([wgts[i]*tr_vars[i] for i in tr_items]) == 0
     for e in tr.inputs:

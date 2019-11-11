@@ -96,6 +96,14 @@ A lekezelése az előző példával analóg módon, annyi különbséggel, hogy 
 </invoke>
 \end{verbatim}
 %TODO ebben nem vbagyok biztos hogy hogy lehet. Átad egy start tokent egy részhálónak??
+A grafikus megjelenítése \aref{fig:invoke}. ábrán látható.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.6]{images/invoke.png}
+\caption{Az \texttt{invoke} grafikus jelölése az Oracle BPEL designer-ben}
+\label{fig:invoke}
+\end{figure}
 
 \section{\texttt{<assign>}}
 
@@ -116,6 +124,14 @@ A lekezelése az előző példával analóg módon, annyi különbséggel, hogy 
 </assign>
 \end{verbatim}
 Az érték hozzárendelése nagyon egszerűen átírható egy tranzicióra ami a megfelelő tokenek színét módosítja. 
+A grafikus megjelenítése \aref{fig:assign}. ábrán látható.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=1]{images/assign.png}
+\caption{Az \texttt{assign} grafikus jelölése az Oracle BPEL designer-ben}
+\label{fig:assign}
+\end{figure}
 
 \section{\texttt{<validate>}}
 
@@ -192,6 +208,14 @@ Egyszerűen csak tranziciók és helyek összefűzése.
 </if>
 \end{verbatim}
 Egy tranzició, mely tokenek függvényében más felé küldi tovább, vagy generál tokeneket. Analóg módon egy \textit{Switch-Case} elágazás is definiálható vele.
+A grafikus megjelenítése \aref{fig:if}. ábrán látható.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=1]{images/if.png}
+\caption{Az \texttt{if} grafikus jelölése az Oracle BPEL designer-ben}
+\label{fig:if}
+\end{figure}
 
 \section{\texttt{<while>}}
 
@@ -270,6 +294,14 @@ Egyszerű loop utasítás, azonban párhuzamosítás esetén a részhálóból m
    </onAlarm>
 </pick>
 \end{verbatim}
+A grafikus megjelenítése \aref{fig:pick}. ábrán látható.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=1]{images/pick.png}
+\caption{A \texttt{pick} grafikus jelölése az Oracle BPEL designer-ben}
+\label{fig:pick}
+\end{figure}
 
 \section{\texttt{<flow>}}
 
@@ -283,6 +315,14 @@ Konkurens elemek deklarálására szolgál. Linkek segítségével megadható f�
    activity+
 </flow>
 \end{verbatim} 
+A grafikus megjelenítése \aref{fig:flow}. ábrán látható.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=1]{images/flow.png}
+\caption{A \texttt{flow} grafikus jelölése az Oracle BPEL designer-ben}
+\label{fig:flow}
+\end{figure}
 
 \section{\texttt{<scope>}}
 
