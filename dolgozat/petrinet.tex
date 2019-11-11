@@ -66,7 +66,7 @@ A hierarchikus CPN rendszerben az átláthatóság növelése érdekében össze
 A moduloknál fontos szerepet kapnak az átadó helyek, melyeken keresztül a tokenek bejöhetnek a modulba illetve kiléphetnek a modulból. Az ilyen port jellegű helyek lehetnek bemeneti portok (IN) illetve kimeneti portok (OUT).  
 
 A CPN rendszerek egyik hasznos tulajdonsága, hogy lehetőséget adnak a felépített modell formális ellenőrzésére, validálására és értékelésére. A formális ellenőrzés egyik leggyakoribb eszköze az állapottér (state space)  modell, ahol az állapottér egy olyan irányított gráf, melyben a csomópontok a háló egy lehetséges  M(CPN) jelölési állapota. Azaz a háló struktúrája rögzített, de az egyes elemeknél a tokenek és változók halmaza, azok állapota változhat. A véges állapottér modellt rendszerint szimulációkal állítják elő. 
-
+\newpage
 Az állapottér modellből kiindulva további elemzésekre ad lehetőséget a komponens gráf modell (SCC graph:  strongly-connected-component graph) formalizmus. Az  SCC gráfból a rendszer általános viselkedési szabályaira lehet következtetni. Az SCC gráf olyan gráf, melynek csomópontjai  az állapottér azon diszjunkt részhalmazai, ahol egy részhalmaz bármely két elemére igaz, hogy az egyik elem  elérhető a másikból. 
 
 Az elemzések során az alábbi főbb tulajdonságok elemzésére szoktak kitérni:
@@ -77,5 +77,148 @@ Az elemzések során az alábbi főbb tulajdonságok elemzésére szoktak kitér
 \item Liveness Properties
 \item Fairness Properties
 \end{itemize}
-%TODO insert mintaállapottér 1-2-3.png here
+\section{Saját modell,\textsl{(kiegészítés a színezett esethez)}}
+A színezett Petri-hálók esetén több különböző típusú tokenek élnek a rendszerben. A kapacitás vizsgálatnál ekkor az egyes tranzícióknál eltérő lehet a kapacitás korlát (a maximális folyam erősség) a különböző típusú tokenek esetén. Emiatt külön kell vizsgálni az egyes típusok folyam erősségét, nem lehet összevonni őket. 
+A színezett hálóban az élekhez $I^c_x$ token áramlás erősségeket definiálunk, ahol x jelöli az él indexét és c a színkód. A forrás helyekhez $Q^c_x$ forrás erősség indexeket adunk meg a különböző c színekre vonatkozólag. A hálóban az alábbi kapacitás korlátokat vezetjük be:
+\begin{itemize}
+\item $C^C_x$: az x. tranzíció maximális erőssége a c szín esetén 
+\item $C^C_y$: az y. nyelő maximális folyam erőssége a c szín esetén
+\end{itemize}
+A hálóban az alábbi megkötések élnek a folyamerősségekre:
+\begin{itemize}
+\item forrás helyek (x) esetén: $\forall c$ színre: $\sum_{y\text{ kimenő élek}}I^C_Y = Q^C_x$
+\item nyelő helyek (x) esetén: $\forall c$ színre: $\sum_{y\text{ bejövő élek}}I^C_y \leq C^C_x$
+\item belső helyek esetén: $\forall c$ színre: $\sum_{y\text{ kimenő élek}} I^C_y \leq \sum_{y\text{ bejövő élek}}$
+\item tranzíciók (x) esetén:
+$$\forall c \text{ színre} \sum_{y\text{ kimenő élek}} I^C_y == \sum_{y\text{ bejövő élek}} I^C_y $$
+$$\sum_{c \text{ színek}}\left( \frac{1}{C^C_x} \left( \sum_{y \text{ bejövő élek}} I^C_y \right) \right) \leq 1$$
+$$\forall c \text{ színre:} \forall \text{ kimenő} (y,z) \text{élre: } I^C_y=I^C_z$$
+\item az AND típusú tranzakciók esetén még ezen felül teljesül, hogy 	$\forall c$ színre: $\forall$ bejövő $(y,z)$ élre $I^C_y=I^C_z$
+\end{itemize}
+Az egyes belső helyeken a bufferbe áramló tokenek  eredő intenzitása:
+$$F=\sum_{c\text{ színek}} \left( \sum_{x\text{ belső hely}}\left( \sum_{y\text{ bejövő élek }x\text{-nél}}I^C_y - \sum_{y \text{ kimenő helyek }x\text{-nél}} I^C_y \right) \right)$$
+Az F függvény 0 értéke esetén nincs szükség belső bufferre. 
+A fenti feladat egy LP programozási feladatnak is tekinthető, ahol a változók az élek $I_x$ nem negatív intenzitásai és a célfüggvény: $F \rightarrow \min$ alakú. 
+
+\section{A validációs számítás algoritmusa}
+A hálót leíró struktúra három alappilléren nyugszik:
+\begin{enumerate}
+\item helyek
+\item tranziciók
+\item élek
+\end{enumerate}
+A helyek esetén az alábbi attribútumokat tárolja a rendszer:
+\begin{itemize}
+\item id : azonosító kód
+\item inputs : bejövő élek
+\item outputs : kimenő élek
+\item tokens : tárolt tokenek
+\item Q : forrás intenzitás
+\item border : pozíció jelző, belső vagy határ pozíció
+\end{itemize}
+        
+A tranzíciók jellemzői:
+\begin{itemize}
+\item id : azonosító kód 
+\item inputs : bejövő élek
+\item outputs : kimenő élek
+\item C : feldolgozási intenzitás
+\item mode : működési mód (AND, OR) 
+\end{itemize}
+
+Az élek attribútumai:
+\begin{itemize}
+\item id : azonosító kód 
+\item input : induló elem
+\item output : cél elem
+\item alfa : az él kapacitás jelzője
+\item inner : él típusa, belső vagy határ
+\end{itemize}
+
+A kapacitás vizsgálatot végző rutin az alábbi tevékenységeket hajtja végre.
+\begin{verbatim}
+     	// új LP feladat inicializása
+        prop = Init_LpProblem(Minimize)
+	// változók inicializálása
+        tr_vars = LpVariable("Iv",tr_items,lowBound=0,cat='Continuous')
+
+
+// ciklus a helyekre
+        for pp in places:
+		// ha belső hely
+	if pp.border == 0
+		// együttható aktualizálása
+		costs[ll] = costs[ll] +/- 1
+	// a célfüggvény meghatározása
+        Init_lpSum([costs[i]*tr_vars[i] for i in tr_items])
+
+	// ciklus a helyekre
+        for pp in places:
+	// ha belső pont
+if pl.border == 0:
+                for e in pl.inputs:
+                    wgts[e] = wgts[e] + 1
+                for e in pl.outputs:
+                    wgts[e] = wgts[e] - 1
+                cnts = 0
+// az egyenlőtlenség rendszer együtthatóinak meghatározása 
+               Init_lpSum([wgts[i]*tr_vars[i] for i in tr_items]) >= cnts
+		
+// ha forrás pont:
+            if pl.border == 1:
+                for e in pl.outputs:
+                    wgts[e] = wgts[e] + 1
+                cnts = pl.Q
+// az egyenlőtlenség rendszer együtthatóinak meghatározása 
+                Init_lpSum([wgts[i]*tr_vars[i] for i in tr_items]) == cnts
+
+// ha nyelő pont:
+            if pl.border == 2:
+                for e in pl.inputs:
+                    wgts[e] = wgts[e] + 1
+                cnts = -pl.Q
+// az egyenlőtlenség rendszer együtthatóinak meghatározása 
+                Init_.lpSum([wgts[i]*tr_vars[i] for i in tr_items]) <= cnts
+
+	// ciklus a transition elemekre
+        for tr in self.transitions:
+            for e in tr.inputs:
+                wgts[e] = wgts[e] + 1
+            for e in tr.outputs:
+                wgts[e] = wgts[e] - 1
+// az egyenlőtlenség rendszer együtthatóinak meghatározása 
+            Init_lpSum([wgts[i]*tr_vars[i] for i in tr_items]) == 0
+
+            for e in tr.inputs:
+                wgts[e] = wgts[e] + 1
+            cnts = tr.C
+// az egyenlőtlenség rendszer együtthatóinak meghatározása 
+            Init_lpSum([wgts[i]*tr_vars[i] for i in tr_items]) <= cnts
+
+		// AND működési modell, szinkronitás
+            if tr.mode == 'AND':
+                for e in range(1,len(tr.inputs)):
+// az egyenlőtlenség rendszer együtthatóinak meghatározása 
+
+                    Init_lpSum([wgts[i]*tr_vars[i] for i in tr_items]) == 0
+                for e in range(1,len(tr.outputs)):
+// az egyenlőtlenség rendszer együtthatóinak meghatározása 
+                    Init_lpSum([wgts[i]*tr_vars[i] for i in tr_items]) == 0
+
+		// OR működési modell, tetszőleges beérkezés
+            if tr.mode == 'OR':
+                for e in range(1,len(tr.outputs)):
+                    e1 = tr.outputs[0]
+                    e2 = tr.outputs[e]
+                    wgts[e1] =  1
+                    wgts[e2] =  -1
+                    Init_p.lpSum([wgts[i]*tr_vars[i] for i in tr_items]) == 0
+                    
+        // LP feladat megoldása
+        prob.solve()
+
+	// eredmény kiíratása
+	
+        prob.print()
+\end{verbatim}         
 
