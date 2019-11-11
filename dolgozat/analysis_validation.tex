@@ -1,14 +1,13 @@
 \chapter{A hálón végezhető elemzések}
 \section{Háló korlátosság és puffer kapacitási ellenőrzés}
 
-A háló egy adott helye akkor tekinthető korlátos (bounded) helynek, ha bármely jelölésnél a tokenek száma az adott helynél nem megy egy adott korlát fölé. A Petri háló korlátos, ha minden helye korlátos hely.
+A háló egy adott helye akkor tekinthető korlátos (\textit{bounded}) helynek, ha bármely jelölésnél a tokenek száma az adott helynél nem megy egy adott korlát fölé. A Petri háló korlátos, ha minden helye korlátos hely.
 A háló korlátossága az egyik leggyakoribb és legfontosabb minőségi jellemzője a Petri hálóknak. 
 
-A háló alap tulajdonságainak , beleértve a korlátosságának az elemzésére több módszer is létezik, melyek közül kiemelhető a
+A háló alap tulajdonságainak, beleértve a korlátosságának az elemzésére több módszer is létezik, melyek közül kiemelhető a
 \begin{itemize}
-\item komponens / elérhetőségi gráf elemzése (SCC)
-\item komponens / elérhetőségi gráf elemzése (SCC)
-\item dekompozíciós módszerek 
+\item komponens/elérhetőségi gráf elemzése (SCC),
+\item dekompozíciós módszerek.
 \end{itemize}
 
 A mátrix reprezentáció esetén transzformációs mátrixok segítségével írják fel a Petri háló dinamikáját. Az alapstruktúra az ú.n. incidencia M mátrixban kerül megadásra, melynek elemei az alábbi jelentéssel bírnak: $A_{ij}=a^+_{ij}-a^-_{ij}$, ahol 
@@ -18,13 +17,11 @@ A mátrix reprezentáció esetén transzformációs mátrixok segítségével í
 \end{itemize}
 
 A mátrix alapvetően a tokenek számának a változását mutatja az egyes tranzició átmenetek esetére. A  Petri háló működési alapegyenlete a következő alakban adható meg: 
-$$M_k=M_{k-1}+ Au_k$$
+$$M_k=M_{k-1}+ Au_k,$$
 ahol $M_k$ jelöli a háló markereinek (tokenek) státuszát a $k.$ lépésben. Az $u$ vektor a helyek tüzelési státuszt írja le. 
 
-A fenti modellen alapuló elérhetőség vizsgálatok felhasználhatóak a korlátosság elemzésére is. LINK!% [ Petri Nets: Properties, Analysis and Appl kat ions, http://people.disim.univaq.it/adimarco/teaching/bioinfo15/paper.pdf]  
-A kapcsolódó  egyenletek hatékony,. lineáris programozási megoldását vizsgálta a LINK!  
-%[JEAN B. LASSERRE PHILIPPE MAHEY Using linear programming in Petri net analysis :http://www.numdam.org/article/RO_1989__23_1_43_0.pdf] 
-dolgozat is.
+A fenti modellen alapuló elérhetőség vizsgálatok felhasználhatóak a korlátosság elemzésére \cite{murata1989petri}.
+A kapcsolódó  egyenletek hatékony, lineáris programozási megoldása szintén ismert \cite{lasserre1989using}.
 
 %TODO itt van egy kép, nem tudom lehet e direktben cite-olni????
 
@@ -32,47 +29,49 @@ dolgozat is.
 
 Modellünkben korlátosságnak egy folyam-gráf megközelítését dolgoztuk ki.  A hálóban a következő típusú helyeket definiáljuk:
 \begin{itemize}
-\item forrás hely
-\item nyelő hely
-\item köztes hely
+\item forrás hely,
+\item nyelő hely,
+\item köztes hely.
 \end{itemize}
 Feltesszük, hogy csak a köztes helyeken lehet tokeneket tárolni, csak ott vannak pufferek. A hálóban az élekhez egy $I_x$ token áramlás erősséget definiálunk, ahol x jelöli az él indexét. A forrás helyekhez egy $Q_x$ forrás erősség indexet adunk meg. A hálóban az alábbi kapacitás korlátokat vezetjük be:
 \begin{itemize}
-\item $C_x:$ az x. tranzíció maximális erőssége 
-\item $C_y:$ az y. nyelő maximális folyam erőssége 
+\item $C_x:$ az x. tranzíció maximális erőssége,
+\item $C_y:$ az y. nyelő maximális folyam erőssége.
 \end{itemize}
 
 A tranzícióknál a bemenő élek vonatkozásában kétféle működési módot értelmezünk:
 \begin{itemize}
-\item AND-mód: akkor van tüzelés, ha minden bejövő élnél megvan az al elvárt tokenszám, van szinkron
-\item OR-mód: akkor van tüzelés, ha megjelenik valamely bemeneten egy token, nincs szinkron  
+\item AND-mód: akkor van tüzelés, ha minden bejövő élnél megvan az al elvárt tokenszám, van szinkron,
+\item OR-mód: akkor van tüzelés, ha megjelenik valamely bemeneten egy token, nincs szinkron.
 \end{itemize}
-A hálóban az alábbi megkötések élnek a folyamerősségekre
+A hálóban az alábbi megkötések élnek a folyamerősségekre:
 \begin{itemize}
-\item forrás helyek esetén: $\sum_y I_y=Q_x$ ($y$: kimenő élek)
-\item nyelő helyek esetén: $\sum_y I_y \leq C_x$ ($y$: bejövő élek)
+\item forrás helyek esetén: $\sum_y I_y=Q_x$ ($y$: kimenő élek),
+\item nyelő helyek esetén: $\sum_y I_y \leq C_x$ ($y$: bejövő élek),
 \item belső helyek esetén: 
-\item$\sum_{y(ki)} I_y\leq \sum_{y(be)} I_y$
+$\sum_{y(ki)} I_y\leq \sum_{y(be)} I_y$,
 \item tranziciók esetén: 
 \begin{itemize}
-\item $\sum_y I_y\leq C_x$ ($y:$ bejövő élek)
-\item $\sum_{y(ki)} I_y = \sum_{y(be)} I_y$
-\item $\forall$ kimenő $x,y$ élre $I_x=I_y$
+\item $\sum_y I_y\leq C_x$ ($y:$ bejövő élek),
+\item $\sum_{y(ki)} I_y = \sum_{y(be)} I_y$,
+\item $\forall$ kimenő $x,y$ élre $I_x=I_y$.
 \end{itemize}
 \end{itemize}
-az AND típusú tranzakciók esetén még ezen felül teljesül, hogy $\forall$ bejövő $x,y$ élre:\\
+Az AND típusú tranzakciók esetén még ezen felül teljesül, hogy $\forall$ bejövő $x,y$ élre:\\
 $I_x = I_y$.
 
 Az egyes belső helyeken a pufferbe áramló tokenek  eredő intentitása:
-
 $$F= \sum_{x(\text{belső hely})} \left( \sum_{y(\text{x bejövő él})} I_y - \sum_{y(\text{x kimenő él})} I_y \right)$$
-Az F függvény 0 értéke esetén nincs szükség belső pufferre.
+Az $F$ függvény 0 értéke esetén nincs szükség belső pufferre.
 
 A fenti feladatot egy LP programozási feladatnak is tekinthető, ahol a változók az élek $I_x$ nem negatív intenzitásai és a célfüggvény:
 $$F\Rightarrow \min$$ alakú.
 
 \section{Számítási implementációja}
-\begin{verbatim}
+
+A számítások Python programozási nyelven kerültek implementálásra a \texttt{PuLP} nevű függvénykönyvtár és a \texttt{networkx} segítségével.
+
+\begin{python}
 import networkx as nx
 import matplotlib.pyplot as plt
 import pulp as p
@@ -336,8 +335,10 @@ class cl_petri_net:
             QV = QV + tr_vars[var].varValue*costs[var]
             print (tr_vars[var],":",tr_vars[var].varValue)
         print ("Cost=", QV)
-\end{verbatim}
+\end{python}
+
 \section{Mintafeladat}
+
 Vegyünk egy 4 helyből és 2 tranzícióból álló rendszert. A helyekből egy nyelő, egy forrás és kettő belső hely. A rendszerben 6 él van az ábrán megadott módon.  A gráfban a sárga elem a helyeket, zöld a tranzíciókat jelöli. A csomópont elemben az első jel a hely kódja, a második a kapcsolódó kapacitás érték. A modellben a kisebb indexű tranzíció AND tulajdonságú, a másik OR tulajdonságú. 
 
 A rendszerben 6 (nem negatív) változó jelenik meg:  $\{0: Iv_0, 1: Iv_1, 2: Iv_2, 3: Iv_3, 4: Iv_4, 5: Iv_5\}$

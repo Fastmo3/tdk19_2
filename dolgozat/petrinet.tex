@@ -1,222 +1,230 @@
 \chapter{Petri-hálók és alkalmazásaik}
-\section{Az alap Petri-hálók}
+
+\section{A Petri-hálók matematikai modellje}
+
 A Petri-háló egy matematikai leírómodell elosztott rendszerek bemutatására.
 A modellt Carl Adam Petri készítette.
 A modell nagyon hasonlít a programozók körében elterjedt folyamat ábrára.
 A háló irányított élekből, helyekből és átmenetekből (\textsl{mint elemek}) áll.
 Az élek csak két különböző típusú elem között állhatnak.
-A helyeken pontok, ún. tokenek állhatnak.
+A helyeken pontok, úgynevezett tokenek állhatnak.
 A tokenek csak diszkrét számban fordulhatnak elő egy helyen, és a token átvitele atomi folyamat, azaz nem félbeszakítható.
-A tokenek elláthatóak attribútummal is ilyen esetben a tokeneket "kiszínezzük" és színezett petri hálóról beszélünk. (ld. 2.2.) %TODO (LINK!)
+A tokenek elláthatóak attribútummal is, ilyen esetben a tokeneket "kiszínezzük" és színezett petri hálóról beszélünk. %TODO (LINK!)
 
 %TODO cite: https://www.abhishekhalder.org/PetriNetReport.pdf__vq9vUXcOjS%2BawepkKcMLeAA64c19da3fb4d67754c3fe7eba8ce1187
-Az alap Petri háló egy biparit, irányított és súlyozott multigráf $PN(P,T,A,W,S)$, ahol 
+A Petri háló alapvető matematikai modellje egy páros, irányított és súlyozott multigráf $PN(P,T,A,W,S)$, ahol 
 \begin{itemize}
-\item $P=\{ p_1,p_2,\ldots ,p_N \}:$ a helyek véges halmaza ,
-\item $T=\{ t_1,t_2,\ldots ,t_M\}:$ egy véges tranzició halmaz,
-\item $P\cap T = \emptyset$
-\item $A \subseteq P\times T \cup T\times P:$ az élek halmaza,
-\item $W: F\Rightarrow N^+:$ az élsúlyok halmaza
-\item $S: P\Rightarrow N^+:$ a kezdőállapot.
+\item $P=\{ p_1,p_2,\ldots ,p_N \}$: a helyek véges halmaza,
+\item $T=\{ t_1,t_2,\ldots ,t_M\}$: egy véges tranzició halmaz,
+\item $P\cap T = \emptyset$,
+\item $A \subseteq P\times T \cup T\times P$: az élek halmaza,
+\item $W: F\Rightarrow N^+$: az élsúlyok halmaza,
+\item $S: P\Rightarrow N^+$: a kezdőállapot.
 \end{itemize}
 
 \section{Színezett Petri-hálók}
 
-Az elemi színezett háló felírható, mint egy oly struktúra, ami: $CPN(P,T,A,\Sigma ,V,C,G,E,S)$, ahol 
+Az elemi színezett háló felírható, mint egy
+\[
+CPN(P, T, A, \Sigma, V, C, G, E, S)
+\]
+struktúra, ahol 
 \begin{itemize}
-\item $P=\{ p_1,p_2,\ldots ,p_N \}:$ a helyek véges halmaza ,
-\item $T=\{ t_1,t_2,\ldots ,t_M\}:$ egy véges tranzició halmaz,
-\item $A \subseteq P\times T \cup T\times P:$ az élek halmaza,
-\item $\Sigma:$ a színek halmazainak halmaza, 
-\item $V:$ a változók halmaza, ahol $\forall v\in V:$ változóhoz egy $Type[v] \in \Sigma $ típus rendelhető,
-\item $C: P\rightarrow \Sigma :$ a helyekhez színeket rendelő függvény,
-\item $G: T\rightarrow EXPR_V:$ az egyes tranzíciókhoz kapcsolódó validációs, ellenőrzési kifejezés (logikai értékű)
-\item $E: A\rightarrow EXPR_V:$ z  egyes élekhez kapcsolódó kifejezés, amely a kapcsolódó hely színhalmazához tartozó értéket vehet fel
-\item $S: P\Rightarrow N^+:$ a kezdőállapot.
+\item $P=\{ p_1, p_2, \ldots, p_N \}$: a helyek véges halmaza,
+\item $T=\{ t_1, t_2, \ldots, t_M\}$: egy véges tranzició halmaz,
+\item $A \subseteq P\times T \cup T \times P$: az élek halmaza,
+\item $\Sigma$: a színek halmazainak halmaza, 
+\item $V$: a változók halmaza, ahol $\forall v\in V$: változóhoz egy $Type[v] \in \Sigma $ típus rendelhető,
+\item $C: P\rightarrow \Sigma$: a helyekhez színeket rendelő függvény,
+\item $G: T\rightarrow EXPR_V$: az egyes tranzíciókhoz kapcsolódó validációs, ellenőrzési kifejezés (logikai értékű),
+\item $E: A\rightarrow EXPR_V$: az egyes élekhez kapcsolódó kifejezés, amely a kapcsolódó hely színhalmazához tartozó értéket vehet fel,
+\item $S: P\Rightarrow N^+$: a kezdőállapot.
 \end{itemize}
 
-Adott $CPN(P,T,A,\Sigma ,V,C,G,E,S)$ színezett hálóhoz az alábbi kezelő funkciók köthetőek: 
+Adott $CPN(P, T, A, \Sigma, V, C, G, E, S)$ színezett hálóhoz az alábbi kezelő funkciók köthetőek: 
 \begin{itemize}
-\item $M(p):$ a jelölő (marker) függvény, melynek értéke a $p$ helyhez kapcsolódó tokenek halmaza. Színezett Petri háló esetén az $M(p)$ elemek színeinek illeszkedni kell a $C(p)$ színhalma
-\item $M_0(p):$  helyek induló tokenkészlete
-\item $Var(t):$ a tranzíciók viselkedését leíró változók halmaza
-\item $b(v):$ a adott v változó értékét megadó kifejezés, ahol $b(v) \in Type[v]$
+\item $M(p)$: a jelölő (\textit{marker}) függvény, melynek értéke a $p$ helyhez kapcsolódó tokenek halmaza. (Színezett Petri háló esetén az $M(p)$ elemek színeinek illeszkedni kell a $C(p)$ színhalmazhoz),
+\item $M_0(p)$: helyek induló tokenkészlete,
+\item $Var(t)$: a tranzíciók viselkedését leíró változók halmaza,
+\item $b(v)$: az adott $v$ változó értékét megadó kifejezés, ahol $b(v) \in Type[v]$.
 \end{itemize}
 
-Egy adott $t$ tranzíció esetén a $Var(t)$ kifejezés a tranzícióhoz rendelt változók együttese, ahol a változók a $G(t)$ vagy $E$(a: t-hez kötődő él) kifejezésekben szerepelnek.
+Egy $t$ tranzíció esetén a $Var(t)$ kifejezés a tranzícióhoz rendelt változók együttese, ahol a változók a $G(t)$ vagy $E$(a: t-hez kötődő él) kifejezésekben szerepelnek.
+Az egyes esetekhez tartozó halmazok tehát az alábbiak.
 \begin{equation*}
 Var(t)=\begin{cases}
-\{n,d\} &\text{if } t=SendPacket\\
-\{n,d,success\} &\text{if } t= TransmitPacket\\
-\{n,d,k,data\} &\text{if } t=ReceivePacket\\
-\{n,success\} &\text{if } t=TrancmitAck\\
-\{n,k\} &\text{if }t=ReceiveAck
+\{n,d\} &\text{ha } t=SendPacket, \\
+\{n,d,success\} &\text{ha } t= TransmitPacket, \\
+\{n,d,k,data\} &\text{ha } t=ReceivePacket, \\
+\{n,success\} &\text{ha } t=TrancmitAck, \\
+\{n,k\} &\text{ha }t=ReceiveAck.
 \end{cases}
 \end{equation*}
 
-A hálóban egy tranzíció akkor engedélyezett (ready), ha minden bemenő helyeknél a kívánt tokenszám megtalálható.   Jelölt hálók esetében:
-$$M'(p)=M(p)-I(p,t)+O(p,t): \forall p\in P,$$ ahol 
+A hálóban egy tranzíció akkor engedélyezett (\textit{ready}), ha a bemenő helyeknél a kívánt tokenszám megtalálható.
+Jelölt hálók esetében:
+\[
+M'(p)=M(p)-I(p,t)+O(p,t): \forall p\in P,
+\]
+ahol 
 \begin{itemize}
-\item $I:F\Rightarrow N^+:$  bejövő áram intenzitás
-\item $O:F\Rightarrow N^+:$ kimenő áram intenzitás
-
+\item $I:F\Rightarrow N^+:$  bejövő áram, intenzitás
+\item $O:F\Rightarrow N^+:$ kimenő áram. intenzitás
 \end{itemize}
-A hierarchikus CPN rendszerben az átláthatóság növelése érdekében összefogó modulokat is lehet alkalmazni. Egy modul más elemi egységek együttese, konténere. %TODO Insert "rendszerséma 3 modullal.png" & 2A receiver belső szerkezete.png"
+
+A hierarchikus CPN rendszerben az átláthatóság növelése érdekében összefogó modulokat is lehet alkalmazni. Egy modul más elemi egységek együttese, tárolója (\ref{fig:schema}. ábra).
+
+\begin{figure}[h!]
+\centering
+%\includegraphics[scale=1]{images/???.png}
+\caption{Rendszerséma 3 modullal}
+\label{fig:schema}
+\end{figure}
+%TODO Insert "rendszerséma 3 modullal.png" & 2A receiver belső szerkezete.png"
 
 A moduloknál fontos szerepet kapnak az átadó helyek, melyeken keresztül a tokenek bejöhetnek a modulba illetve kiléphetnek a modulból. Az ilyen port jellegű helyek lehetnek bemeneti portok (IN) illetve kimeneti portok (OUT).  
 
-A CPN rendszerek egyik hasznos tulajdonsága, hogy lehetőséget adnak a felépített modell formális ellenőrzésére, validálására és értékelésére. A formális ellenőrzés egyik leggyakoribb eszköze az állapottér (state space)  modell, ahol az állapottér egy olyan irányított gráf, melyben a csomópontok a háló egy lehetséges  M(CPN) jelölési állapota. Azaz a háló struktúrája rögzített, de az egyes elemeknél a tokenek és változók halmaza, azok állapota változhat. A véges állapottér modellt rendszerint szimulációkal állítják elő. 
-\newpage
-Az állapottér modellből kiindulva további elemzésekre ad lehetőséget a komponens gráf modell (SCC graph:  strongly-connected-component graph) formalizmus. Az  SCC gráfból a rendszer általános viselkedési szabályaira lehet következtetni. Az SCC gráf olyan gráf, melynek csomópontjai  az állapottér azon diszjunkt részhalmazai, ahol egy részhalmaz bármely két elemére igaz, hogy az egyik elem  elérhető a másikból. 
+A CPN rendszerek egyik hasznos tulajdonsága, hogy lehetőséget adnak a felépített modell formális ellenőrzésére, validálására és értékelésére. A formális ellenőrzés egyik leggyakoribb eszköze az állapottér (\textit{state space})  modell, ahol az állapottér egy olyan irányított gráf, melyben a csomópontok a háló egy lehetséges  $M(CPN)$ jelölési állapota. Azaz a háló struktúrája rögzített, de az egyes elemeknél a tokenek és változók halmaza, azok állapota változhat. A véges állapottér modellt rendszerint szimulációkal állítják elő. 
 
-Az elemzések során az alábbi főbb tulajdonságok elemzésére szoktak kitérni:
+Az állapottér modellből kiindulva további elemzésekre ad lehetőséget a komponens gráf modell (\textit{Strongly Connected Component Graph}, röviden SCC) formalizmus. Az SCC gráfból a rendszer általános viselkedési szabályaira lehet következtetni. Az SCC gráf olyan gráf, melynek csomópontjai az állapottér azon diszjunkt részhalmazai, ahol egy részhalmaz bármely két elemére igaz, hogy az egyik elem  elérhető a másikból. 
+
+Az elemzések során az alábbi főbb tulajdonságok elemzésére szokás kitérni:
 \begin{itemize}
-\item Reachability Properties
-\item Boundedness Properties
-\item Home Properties 
-\item Liveness Properties
-\item Fairness Properties
+\item Reachability Properties,
+\item Boundedness Properties,
+\item Home Properties,
+\item Liveness Properties,
+\item Fairness Properties.
 \end{itemize}
-\section{Saját modell,\textsl{(kiegészítés a színezett esethez)}}
-A színezett Petri-hálók esetén több különböző típusú tokenek élnek a rendszerben. A kapacitás vizsgálatnál ekkor az egyes tranzícióknál eltérő lehet a kapacitás korlát (a maximális folyam erősség) a különböző típusú tokenek esetén. Emiatt külön kell vizsgálni az egyes típusok folyam erősségét, nem lehet összevonni őket. 
-A színezett hálóban az élekhez $I^c_x$ token áramlás erősségeket definiálunk, ahol x jelöli az él indexét és c a színkód. A forrás helyekhez $Q^c_x$ forrás erősség indexeket adunk meg a különböző c színekre vonatkozólag. A hálóban az alábbi kapacitás korlátokat vezetjük be:
+
+\section{Az alkalmazott, kibővített modell}
+
+A színezett Petri-hálók esetén több különböző típusú tokenek élnek a rendszerben. A kapacitás vizsgálatnál ekkor az egyes tranzícióknál eltérő lehet a kapacitás korlát (a maximális folyam erősség) a különböző típusú tokenek esetén. Emiatt külön kell vizsgálni az egyes típusok folyam erősségét, nem lehet összevonni őket.
+
+A színezett hálóban az élekhez $I^c_x$ token áramlás erősségeket definiálunk, ahol $x$ jelöli az él indexét és $c$ a színkód. A forrás helyekhez $Q^c_x$ forrás erősség indexeket adunk meg a különböző $c$ színekre vonatkozólag. A hálóban az alábbi kapacitás korlátokat vezetjük be:
 \begin{itemize}
-\item $C^C_x$: az x. tranzíció maximális erőssége a c szín esetén 
-\item $C^C_y$: az y. nyelő maximális folyam erőssége a c szín esetén
+\item $C^C_x$: az $x$. tranzíció maximális erőssége a c szín esetén 
+\item $C^C_y$: az $y$. nyelő maximális folyam erőssége a c szín esetén
 \end{itemize}
 A hálóban az alábbi megkötések élnek a folyamerősségekre:
 \begin{itemize}
-\item forrás helyek (x) esetén: $\forall c$ színre: $\sum_{y\text{ kimenő élek}}I^C_Y = Q^C_x$
-\item nyelő helyek (x) esetén: $\forall c$ színre: $\sum_{y\text{ bejövő élek}}I^C_y \leq C^C_x$
+\item forrás helyek ($x$) esetén: $\forall c$ színre: $\sum_{y\text{ kimenő élek}}I^C_Y = Q^C_x$
+\item nyelő helyek ($x$) esetén: $\forall c$ színre: $\sum_{y\text{ bejövő élek}}I^C_y \leq C^C_x$
 \item belső helyek esetén: $\forall c$ színre: $\sum_{y\text{ kimenő élek}} I^C_y \leq \sum_{y\text{ bejövő élek}}$
-\item tranzíciók (x) esetén:
+\item tranzíciók ($x$) esetén:
 $$\forall c \text{ színre} \sum_{y\text{ kimenő élek}} I^C_y == \sum_{y\text{ bejövő élek}} I^C_y $$
 $$\sum_{c \text{ színek}}\left( \frac{1}{C^C_x} \left( \sum_{y \text{ bejövő élek}} I^C_y \right) \right) \leq 1$$
 $$\forall c \text{ színre:} \forall \text{ kimenő} (y,z) \text{élre: } I^C_y=I^C_z$$
 \item az AND típusú tranzakciók esetén még ezen felül teljesül, hogy 	$\forall c$ színre: $\forall$ bejövő $(y,z)$ élre $I^C_y=I^C_z$
 \end{itemize}
 Az egyes belső helyeken a bufferbe áramló tokenek  eredő intenzitása:
-$$F=\sum_{c\text{ színek}} \left( \sum_{x\text{ belső hely}}\left( \sum_{y\text{ bejövő élek }x\text{-nél}}I^C_y - \sum_{y \text{ kimenő helyek }x\text{-nél}} I^C_y \right) \right)$$
-Az F függvény 0 értéke esetén nincs szükség belső bufferre. 
-A fenti feladat egy LP programozási feladatnak is tekinthető, ahol a változók az élek $I_x$ nem negatív intenzitásai és a célfüggvény: $F \rightarrow \min$ alakú. 
+$$F=\sum_{c\text{ színek}} \left( \sum_{x\text{ belső hely}}\left( \sum_{y\text{ bejövő élek }x\text{-nél}}I^C_y - \sum_{y \text{ kimenő helyek }x\text{-nél}} I^C_y \right) \right).$$
+Az $F$ függvény 0 értéke esetén nincs szükség belső bufferre. 
+A fenti feladat egy lineáris programozási feladatnak (röviden LP) is tekinthető, ahol a változók az élek $I_x$ nem negatív intenzitásai és a célfüggvény $F \rightarrow \min$ alakú. 
 
 \section{A validációs számítás algoritmusa}
-A hálót leíró struktúra három alappilléren nyugszik:
-\begin{enumerate}
-\item helyek
-\item tranziciók
-\item élek
-\end{enumerate}
+
+A hálót leíró struktúra három alappilléren nyugszik: helyek, tranzíciók, élek.
+
 A helyek esetén az alábbi attribútumokat tárolja a rendszer:
 \begin{itemize}
-\item id : azonosító kód
-\item inputs : bejövő élek
-\item outputs : kimenő élek
-\item tokens : tárolt tokenek
-\item Q : forrás intenzitás
-\item border : pozíció jelző, belső vagy határ pozíció
+\item \texttt{id}: az egyedi azonosító kód,
+\item \texttt{inputs}: bejövő élek,
+\item \texttt{outputs}: kimenő élek,
+\item \texttt{tokens}: tárolt tokenek,
+\item \texttt{Q}: forrás intenzitás,
+\item \texttt{border}: pozíció jelző, belső vagy határ pozíció.
 \end{itemize}        
 A tranzíciók jellemzői:
 \begin{itemize}
-\item id : azonosító kód 
-\item inputs : bejövő élek
-\item outputs : kimenő élek
-\item C : feldolgozási intenzitás
-\item mode : működési mód (AND, OR) 
+\item \texttt{id}: egyedi azonosító kód,
+\item \texttt{inputs}: bejövő élek,
+\item \texttt{outputs}: kimenő élek,
+\item \texttt{C}: feldolgozási intenzitás,
+\item \texttt{mode}: működési mód (AND, OR).
 \end{itemize}
 Az élek attribútumai:
 \begin{itemize}
-\item id : azonosító kód 
-\item input : induló elem
-\item output : cél elem
-\item alfa : az él kapacitás jelzője
-\item inner : él típusa, belső vagy határ
+\item \texttt{id}: azonosító kód,
+\item \texttt{input}: induló elem,
+\item \texttt{output}: cél elem,
+\item \texttt{alfa}: az él kapacitás jelzője,
+\item \texttt{inner}: él típusa, belső vagy határ.
 \end{itemize}
 
 A kapacitás vizsgálatot végző rutin az alábbi tevékenységeket hajtja végre.
-\begin{verbatim}
-     	// új LP feladat inicializása
-        prop = Init_LpProblem(Minimize)
-	// változók inicializálása
-        tr_vars = LpVariable("Iv",tr_items,lowBound=0,cat='Continuous')
-
-
-// ciklus a helyekre
-        for pp in places:
-		// ha belső hely
-	if pp.border == 0
-		// együttható aktualizálása
+Új LP feladat létrehozása a \texttt{prop} változóba:
+\begin{python}
+prop = Init_LpProblem(Minimize)
+\end{python}
+Az optimalizálási probléma változóinak inicializálása:
+\begin{python}
+tr_vars = LpVariable("Iv", tr_items, lowBound=0, cat='Continuous')
+\end{python}
+Együtthatók meghatározása és beállítása:
+\begin{python}
+for pp in places:
+	if pp.border == 0:
 		costs[ll] = costs[ll] +/- 1
-	// a célfüggvény meghatározása
-        Init_lpSum([costs[i]*tr_vars[i] for i in tr_items])
+\end{python}
+A célfüggvény meghatározása:
+\begin{python}
+Init_lpSum([costs[i] * tr_vars[i] for i in tr_items])
+\end{python}
+Belső pontok súlyának meghatározása:
+\begin{python}
+for pp in places:
+    if pl.border == 0:
+        for e in pl.inputs:
+            wgts[e] = wgts[e] + 1
+        for e in pl.outputs:
+            wgts[e] = wgts[e] - 1
+        cnts = 0
+\end{python}
+Az egyenlőtlenség rendszer együtthatóinak meghatározása:
+\begin{python}
+Init_lpSum([wgts[i] * tr_vars[i] for i in tr_items]) >= cnts
+if pl.border == 1:
+    for e in pl.outputs:
+        wgts[e] = wgts[e] + 1
+    cnts = pl.Q
 
-	// ciklus a helyekre
-        for pp in places:
-	// ha belső pont
-if pl.border == 0:
-                for e in pl.inputs:
-                    wgts[e] = wgts[e] + 1
-                for e in pl.outputs:
-                    wgts[e] = wgts[e] - 1
-                cnts = 0
-// az egyenlőtlenség rendszer együtthatóinak meghatározása 
-               Init_lpSum([wgts[i]*tr_vars[i] for i in tr_items]) >= cnts
-		
-// ha forrás pont:
-            if pl.border == 1:
-                for e in pl.outputs:
-                    wgts[e] = wgts[e] + 1
-                cnts = pl.Q
-// az egyenlőtlenség rendszer együtthatóinak meghatározása 
-                Init_lpSum([wgts[i]*tr_vars[i] for i in tr_items]) == cnts
-
-// ha nyelő pont:
-            if pl.border == 2:
-                for e in pl.inputs:
-                    wgts[e] = wgts[e] + 1
-                cnts = -pl.Q
-// az egyenlőtlenség rendszer együtthatóinak meghatározása 
-                Init_.lpSum([wgts[i]*tr_vars[i] for i in tr_items]) <= cnts
-
-	// ciklus a transition elemekre
+Init_lpSum([wgts[i] * tr_vars[i] for i in tr_items]) == cnts
+if pl.border == 2:
+    for e in pl.inputs:
+        wgts[e] = wgts[e] + 1
+    cnts = -pl.Q
+    
+Init_.lpSum([wgts[i] * tr_vars[i] for i in tr_items]) <= cnts
         for tr in self.transitions:
             for e in tr.inputs:
                 wgts[e] = wgts[e] + 1
             for e in tr.outputs:
                 wgts[e] = wgts[e] - 1
-// az egyenlőtlenség rendszer együtthatóinak meghatározása 
-            Init_lpSum([wgts[i]*tr_vars[i] for i in tr_items]) == 0
+                
+Init_lpSum([wgts[i]*tr_vars[i] for i in tr_items]) == 0
+    for e in tr.inputs:
+        wgts[e] = wgts[e] + 1
+    cnts = tr.C
+    
+Init_lpSum([wgts[i] * tr_vars[i] for i in tr_items]) <= cnts
 
-            for e in tr.inputs:
-                wgts[e] = wgts[e] + 1
-            cnts = tr.C
-// az egyenlőtlenség rendszer együtthatóinak meghatározása 
-            Init_lpSum([wgts[i]*tr_vars[i] for i in tr_items]) <= cnts
+if tr.mode == 'AND':
+    for e in range(1, len(tr.inputs)):
+        Init_lpSum([wgts[i] * tr_vars[i] for i in tr_items]) == 0
+    for e in range(1,len(tr.outputs)):
+        Init_lpSum([wgts[i]*tr_vars[i] for i in tr_items]) == 0
 
-		// AND működési modell, szinkronitás
-            if tr.mode == 'AND':
-                for e in range(1,len(tr.inputs)):
-// az egyenlőtlenség rendszer együtthatóinak meghatározása 
-
-                    Init_lpSum([wgts[i]*tr_vars[i] for i in tr_items]) == 0
-                for e in range(1,len(tr.outputs)):
-// az egyenlőtlenség rendszer együtthatóinak meghatározása 
-                    Init_lpSum([wgts[i]*tr_vars[i] for i in tr_items]) == 0
-
-		// OR működési modell, tetszőleges beérkezés
-            if tr.mode == 'OR':
-                for e in range(1,len(tr.outputs)):
-                    e1 = tr.outputs[0]
-                    e2 = tr.outputs[e]
-                    wgts[e1] =  1
-                    wgts[e2] =  -1
-                    Init_p.lpSum([wgts[i]*tr_vars[i] for i in tr_items]) == 0
-                    
-        // LP feladat megoldása
-        prob.solve()
-
-	// eredmény kiíratása
-	
-        prob.print()
-\end{verbatim}         
-
+if tr.mode == 'OR':
+    for e in range(1,len(tr.outputs)):
+        e1 = tr.outputs[0]
+        e2 = tr.outputs[e]
+        wgts[e1] =  1
+        wgts[e2] =  -1
+        Init_p.lpSum([wgts[i]*tr_vars[i] for i in tr_items]) == 0
+\end{python}
+Az optimalizálási probléma megoldása, majd az eredményeinek a kiírása:
+\begin{python}
+prob.solve()
+prob.print()
+\end{python}
