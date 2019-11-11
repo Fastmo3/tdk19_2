@@ -1,4 +1,5 @@
 \chapter{Az alkalmazás implementációja}
+%TODO add python implementation 
 \section{C\# implementáció}
 
 % Meg kellene mutatni, hogy milyen API és újrahasznosítható elemek készültek el.
@@ -10,3 +11,4 @@ A lépések addig számítódnak amíg a folyamat teljes egészében lefut, vagy
 
 % Itt kifejezetten az alkalmazás szemszögéből (nem pedig üzleti folyamatokra vonatkozóan) kellene bemutatni az alkalmazást.
 A megjelenítéskor probléma lehet a gép számítási kapacitása, vagy annak kihasználhatatlansága. Tesztelés során nagy méretű hálók generálása során, a rajzfolyamat elhúzódhat, ez azt eredményezi, hogy a megjelenítéskor az animáció lassabb lesz, mert a megjelenítő szubrutin a képek elkészülésére vár. A lassulási probléma valamilyen szinten kiküszöbölhető a program aszinkron, több szálú futtatásával, de ekkor ügyelni kell arra, hogy az így generált képek megfelelő sorrendben legyenek pipeolva a megjelenítő számára. (Mivel a két tesztgépen nem volt értelme a többszálú futtatásnak, ezért kivételre került. Az első gépen a processzor egy magja csak több ezer node esetén kezdett lassabban dolgozni, a második gépen a 2 mag pedig nem hozott számottevő javulást.)
+%a 2 programmmodul együtt mködése , resoning a 2 rész meglétére , miért alkalmaztuk illetve , miért optimális (futás stb)
