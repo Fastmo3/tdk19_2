@@ -16,3 +16,21 @@ Az alkalmazás logikailag a következő fő részekből áll:
 \item \textit{Graphics module}: Az MSGL libraryre épül. Feladata a gráf rajzolása és megjelenítése animációval együtt. 
 \item \textit{Computing module}: A háló animációjához végzi a szükséges számításokat és időzítéseket. 
 \end{itemize}
+A programmodulok pedig a következők:
+\begin{itemize}
+\item Form: Az alkalmazás layoutját tartalmazza, illetve a rajta levő elemekhez rendelt kódot. (pl, gombok függvényhívását, töltődési inicializációt, stb.)
+\item GraphBuilder: A petri hálót (mint gráfot) generálja. Saját leíró nyelvet használ, a Model-ben levő hálóz veszi alapul.
+\item Model: Tartalmazza a Petri háló és elemeinek leírását, valamint az MASGL saját node alapú architektúra definíciót, a könnyebb generálás érdekében.
+\item Resources: A projekt által használt "erőforrásokat" ide tartoznak a tesztelési adatstruktúrák, bemenetek, illetve a különböző placeholder képek. 
+\item XmlHandler: Az BPEL (xml) fileok beolvasását és parse-olását ahjtja végre. Kimenete egy feltérképezett XML struktúra, amiben majdnem azonnal lehet különböző node-okra ugrani. 
+\item Converter: A különböző adatstruktúrák közötti konverziós logikát tartalmazza, a segéd adatstruktúrákkal. 
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.5]{images/Classdiagram.png}
+\caption{Az alkalmazás osztálydiagrammja  }
+\label{fig:assign}
+\end{figure}
+
+
+\end{itemize}
