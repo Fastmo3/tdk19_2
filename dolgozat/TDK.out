@@ -1,0 +1,45 @@
+\BOOKMARK [0][-]{chapter.1}{Bevezet\351s}{}% 1
+\BOOKMARK [0][-]{chapter.2}{A BPEL \351s folyamatainak bemutat\341sa}{}% 2
+\BOOKMARK [0][-]{chapter.3}{Petri-h\341l\363k \351s alkalmaz\341saik}{}% 3
+\BOOKMARK [1][-]{section.3.1}{A Petri-h\341l\363k matematikai modellje}{chapter.3}% 4
+\BOOKMARK [1][-]{section.3.2}{Sz\355nezett Petri-h\341l\363k}{chapter.3}% 5
+\BOOKMARK [1][-]{section.3.3}{Az alkalmazott, kibov\355tett modell}{chapter.3}% 6
+\BOOKMARK [1][-]{section.3.4}{A valid\341ci\363s sz\341m\355t\341s algoritmusa}{chapter.3}% 7
+\BOOKMARK [0][-]{chapter.4}{Az \374zleti folyamatok elemeinek lek\351pz\351se}{}% 8
+\BOOKMARK [1][-]{section.4.1}{A lek\351pz\351s menete}{chapter.4}% 9
+\BOOKMARK [1][-]{section.4.2}{<receive>}{chapter.4}% 10
+\BOOKMARK [1][-]{section.4.3}{<reply>}{chapter.4}% 11
+\BOOKMARK [1][-]{section.4.4}{<invoke>}{chapter.4}% 12
+\BOOKMARK [1][-]{section.4.5}{<assign>}{chapter.4}% 13
+\BOOKMARK [1][-]{section.4.6}{<validate>}{chapter.4}% 14
+\BOOKMARK [1][-]{section.4.7}{<throw>}{chapter.4}% 15
+\BOOKMARK [1][-]{section.4.8}{<wait>}{chapter.4}% 16
+\BOOKMARK [1][-]{section.4.9}{<empty>}{chapter.4}% 17
+\BOOKMARK [1][-]{section.4.10}{<sequence>}{chapter.4}% 18
+\BOOKMARK [1][-]{section.4.11}{<if>}{chapter.4}% 19
+\BOOKMARK [1][-]{section.4.12}{<while>}{chapter.4}% 20
+\BOOKMARK [1][-]{section.4.13}{<repeatUntil>}{chapter.4}% 21
+\BOOKMARK [1][-]{section.4.14}{<forEach>}{chapter.4}% 22
+\BOOKMARK [1][-]{section.4.15}{<pick>}{chapter.4}% 23
+\BOOKMARK [1][-]{section.4.16}{<flow>}{chapter.4}% 24
+\BOOKMARK [1][-]{section.4.17}{<scope>}{chapter.4}% 25
+\BOOKMARK [1][-]{section.4.18}{<compensateScope>}{chapter.4}% 26
+\BOOKMARK [1][-]{section.4.19}{<compensate>}{chapter.4}% 27
+\BOOKMARK [1][-]{section.4.20}{<rethrow>}{chapter.4}% 28
+\BOOKMARK [1][-]{section.4.21}{<extensionActivity>}{chapter.4}% 29
+\BOOKMARK [0][-]{chapter.5}{Szimul\341ci\363s \351s valid\341ci\363s keretrendszer}{}% 30
+\BOOKMARK [1][-]{section.5.1}{Elv\341r\341sok az alkalmaz\341ssal szemben}{chapter.5}% 31
+\BOOKMARK [1][-]{section.5.2}{Az alkalmaz\341s fel\351p\355t\351se}{chapter.5}% 32
+\BOOKMARK [0][-]{chapter.6}{Az alkalmaz\341s implement\341ci\363ja}{}% 33
+\BOOKMARK [1][-]{section.6.1}{C\043 implement\341ci\363}{chapter.6}% 34
+\BOOKMARK [1][-]{section.6.2}{Tesztel\351s, tapasztalatok}{chapter.6}% 35
+\BOOKMARK [0][-]{chapter.7}{A h\341l\363n v\351gezheto elemz\351sek}{}% 36
+\BOOKMARK [1][-]{section.7.1}{H\341l\363 korl\341toss\341g \351s puffer kapacit\341si ellenorz\351s}{chapter.7}% 37
+\BOOKMARK [1][-]{section.7.2}{Saj\341t modell}{chapter.7}% 38
+\BOOKMARK [1][-]{section.7.3}{Sz\341m\355t\341si implement\341ci\363ja}{chapter.7}% 39
+\BOOKMARK [1][-]{section.7.4}{Mintafeladat}{chapter.7}% 40
+\BOOKMARK [1][-]{section.7.5}{Elso p\351lda \374zleti folyamat}{chapter.7}% 41
+\BOOKMARK [1][-]{section.7.6}{M\341sodik p\351lda \374zleti folyamat}{chapter.7}% 42
+\BOOKMARK [0][-]{chapter.8}{\326sszegz\351s}{}% 43
+\BOOKMARK [0][-]{chapter.9}{Mell\351kletek}{}% 44
+\BOOKMARK [1][-]{section.9.1}{WSDL szabv\341ny a BPEL sz\341m\341ra}{chapter.9}% 45

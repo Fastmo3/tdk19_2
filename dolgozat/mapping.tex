@@ -16,6 +16,8 @@ Az elemi tevékenységekből összetett folyamatok építhetőek fel szekvencia,
 A BPEL szabvány tevékenység készletének bemutatásánál csak a legfontosabb elemekre térünk most ki. A szabvány részletei a
 http://docs.oasis-open.org/wsbpel/2.0/OS/wsbpel-v2.0-OS.html weboldalról érhetőek el. 
 
+A BPEL definíció egyértelműsíti a folyamat kezdetét és inicializálja is a megfelelő paraméterekkel. A Petri háló erre nem tér ki, ezért bevezetünk egy opcionális \textit{START} trnazíciót. Ennek feladata, a megfelelő tokenek legenerálása a folyamat indításához. A folyamat zárása szintén egyértelmű a BPEL szabványban. Petri háló kapcsán beszélhetünk a háló leállásáról, ha már semmilyen hely és tranzíció nem produkál új tokent, nem várakozik és nem nyel el tokent. A köztes elemek leképzése általánosan nem bonyolult, de megvizsgálhatók alternatív leképzési módok. 
+
 \section{\texttt{<receive>}}
 
 \texttt{<receive>} A recieve egy megfelelő üzenet után engedi a folyamatot továbbhaladni, így várakoztatáshoz használható. A \texttt{<receive>} típusú XML elemekhez tartozó sémaleírás:\\
@@ -68,34 +70,19 @@ A lekezelése az előző példával analóg módon, annyi különbséggel, hogy 
    portType="QName"?
    operation="NCName"
    inputVariable="BPELVariableName"?
-   outputVariable="BPELVariableName"?
-   standard-attributes>
-   standard-elements
-   <correlations>?
-      <correlation set="NCName" initiate="yes|join|no"?
-         pattern="request|response|request-response"? />+
-   </correlations>
-   <catch faultName="QName"?
-      faultVariable="BPELVariableName"?
-      faultMessageType="QName"?
-      faultElement="QName"?>*
-      activity
+   outputVariable="BPELVariableName"?>
+   <catch faultName="QName"? … >*
+  	activity
    </catch>
-   <catchAll>?
-      activity
-   </catchAll>
-   <compensationHandler>?
-      activity
-   </compensationHandler>
    <toParts>?
-      <toPart part="NCName" fromVariable="BPELVariableName" />+
+      <toPart part="NCName" fromVariable="BPELVariableNm"/>+
    </toParts>
    <fromParts>?
-      <fromPart part="NCName" toVariable="BPELVariableName" />+
+      <fromPart part="NCName" toVariable="BPELVariableNm"/>+
    </fromParts>
 </invoke>
+
 \end{verbatim}
-%TODO ebben nem vbagyok biztos hogy hogy lehet. Átad egy start tokent egy részhálónak??
 A grafikus megjelenítése \aref{fig:invoke}. ábrán látható.
 
 \begin{figure}[h!]
@@ -105,6 +92,9 @@ A grafikus megjelenítése \aref{fig:invoke}. ábrán látható.
 \label{fig:invoke}
 \end{figure}
 
+Használatát a programrészek újrafelhasználhatósága indokolja, valamint az átláthatósági alapelvek. Például, az ábrán látható CCvalidation használható ATM-es pénz felvét, egyenleglekérdezés, vagy egyéb ATM nél végezhető művelet során. 
+
+Leképzés során ügyelni kell arra, hogy az \texttt{invoke} paramétereinek megfelelő tokenek keletkezzenek és legyenek átadva a részháló start elemének.
 \section{\texttt{<assign>}}
 
 \texttt{<assign>} Egy változó értékadására szolgáló esemény. Ellentétben egy imperatív értékadással egy \texttt{assign} blokkban bármennyi értékadás, másolás történhet, amíg azt a kliens kezelni tudja, így logikailag egy egységbe zárja a műveleteket.  
