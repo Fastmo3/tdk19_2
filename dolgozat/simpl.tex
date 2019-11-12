@@ -55,7 +55,7 @@ Az alkalmazás megnyitásakor egy helyfoglaló kép, és az alkalmazás kezdeti 
 \begin{figure}[h!]
 \centering
 \includegraphics[scale=0.5]{images/UIlayout.png}
-\caption{Az alkalmazás kezdeti állapota:}
+\caption{Az alkalmazás indulóképernyője}
 \label{fig:flow}
 \end{figure}
 A vezérlőfelület két gombot tartalmaz alapállásban. Egy load és egy start gombot. A load gomb segítségével egy BPEL file tallózható, míg a start a file kiválasztása  után indítja a konverziós és szimulációs szubrutinokat. 
@@ -63,6 +63,12 @@ A vezérlőfelület két gombot tartalmaz alapállásban. Egy load és egy start
 \centering
 \includegraphics[scale=0.5]{images/fileDialog.png}
 \caption{Az alkalmazás tallózó ablaka}
+\end{figure}
+Példaként egy kisebb BPEL folyamatot mutatunk be, mely egy szekvenciát és egy kiíratást tartalmaz. A forráskód egy részletét mutatja az alábbi ábra. A teljes forráskód a mellékletben található meg.
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.4]{images/source.png}
+\caption{A minta forrás BPEL leírás részlete}
 \end{figure}
 
 A tesztelés során szükségessé vált a beolvasott file kiíratása, ezért DEBUG üzemmód esetén a beolvasott file a képernyőre kerül egy MessageBox tartalmaként.
