@@ -51,6 +51,34 @@ internal class Model
 A step-by-step animáció úgy készül, hogy a megfelelő lépések legenerálódnak. A képek bekerülnek egy pipe-ba, ami a program beállításaiban megadott időzítő ütemére átadásra kerülnek megjelenítésre. 
 A lépések addig számítódnak amíg a folyamat teljes egészében lefut, vagy egy olyan nodehoz nem ér ami felhasználói bevitelt vár. Ekkor a számítás szünetel és a UI megjelenítő előkészít egy input mezőt. Az input mező a felhasználói adatbevitel után (ha nem szükséges a következő lépéshez) eltűnik, az átláthatóság kedvéért. A mező tartalma átkerül feldolgozásra és általában token formájában kerül megjelenítésre. (Előfordulhat, hogy a program egy várakozási időt kér. Ez esetben is megjelenítődik token formájában, de a lényeg, a háló tranziciói csak egy bizonyos idő (feldolgozási-ciklusidő) függvényében tüzelnek. Az alkalmazásban nem volt szempont a konvertált hálók mentése, de könnyűszerrel megoldható.
 
+Az alkalmazás megnyitásakor egy helyfoglaló kép, és az alkalmazás kezdeti állapotú vezérlőfelülete fogad. 
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.5]{images/UIlayout.png}
+\caption{Az alkalmazás kezdeti állapota:}
+\label{fig:flow}
+\end{figure}
+A vezérlőfelület két gombot tartalmaz alapállásban. Egy load és egy start gombot. A load gomb segítségével egy BPEL file tallózható, míg a start a file kiválasztása  után indítja a konverziós és szimulációs szubrutinokat. 
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.5]{images/fileDialog.png}
+\caption{Az alkalmazás tallózó ablaka}
+\end{figure}
+
+A tesztelés során szükségessé vált a beolvasott file kiíratása, ezért DEBUG üzemmód esetén a beolvasott file a képernyőre kerül egy MessageBox tartalmaként.
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.4]{images/debug.png}
+\caption{Az alkalmazás debug üzenete}
+\end{figure}
+
+Ha a konverzió sikeres akkor a megjelenítőbe kerül a fordított folyamat, ha nem akkor az alkalmazás üzenttel jelzi a konverziós hibát. Sikeres futás után az alkalmazás vissza áll STOP állapotba.
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.4]{images/done.png}
+\caption{Az alkalmazás szimuláció végi állapota}
+\end{figure}
+\newpage
 \section{Python implementáció}
 A dolgozatban két programozási nyelvet használtam, ami az alábbiakkal indokolható. Az első hogy, a dolgozat kezdeti szakaszán még csak a modellezésre gondoltam, és ezért egy olyan nyelvet választottam ami konverziós és automatizálási lehetőségekben gazdag, mindemellett hatékony és gyors is, valamint már tapasztaltabban alkalmazom. Így esett a választás a C\# -ra. A dolgozat későbbi fejezetében tárgyalom a validáció számítást, ami optimalizáló algoritmust használ. Ez a funkció később merült fel a projektben. Kezdetben az is C\# nyelven lesz implementálva. Később komplikáció adódott, ami a második indok; A C\# , ugyanis főleg nagyvállalati termelésre szánt programnyelv, nem kutatási célokra készült. Ez a gyakorlatban azt jelenti, hogy bár LP feladatot lehet vele megoldani, nem rendelkezik megfelelő (ingyenes, vagy kényelmesen alkalmazható) LP feladatmegoldó könyvtárral. Ekkor került a fókusz a mára általánossá vált adatmodellezési, és kutatási nyelvre, a Pythonra. A Python PuLP csomagja egy LP feladat megoldó csomag, ami rendelkezik előregyártott parametrizálásra kész szubrutinokkal és struktúrákkal, amik megkönnyítik az LP megoldásokat. A megoldás egyenes úton előáll és nem kell extra műveletek sokaságát végezni. A nyelv egyszerűsége miatt a Python nem szült különösebb problémákat. A két modul kommunikációja megoldható egy kapcsolattartó modullal vagy rendszerhívásokkal.
 
