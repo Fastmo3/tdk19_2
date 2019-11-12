@@ -18,6 +18,8 @@ http://docs.oasis-open.org/wsbpel/2.0/OS/wsbpel-v2.0-OS.html weboldalról érhet
 
 A BPEL definíció egyértelműsíti a folyamat kezdetét és inicializálja is a megfelelő paraméterekkel. A Petri háló erre nem tér ki, ezért bevezetünk egy opcionális \textit{START} trnazíciót. Ennek feladata, a megfelelő tokenek legenerálása a folyamat indításához. A folyamat zárása szintén egyértelmű a BPEL szabványban. Petri háló kapcsán beszélhetünk a háló leállásáról, ha már semmilyen hely és tranzíció nem produkál új tokent, nem várakozik és nem nyel el tokent. A köztes elemek leképzése általánosan nem bonyolult, de megvizsgálhatók alternatív leképzési módok. 
 
+(Jelölésrendszer: A rendszer a helyeket P-vel, míg a tranzíciókat T-vel indexeli. A helyek után listázza az adott helyen levő tokeneket. A jelenleg lépésben levő tranzíciók pedig színes kitöltést kapnak. )
+
 \section{\texttt{<receive>}}
 
 \texttt{<receive>} A recieve egy megfelelő üzenet után engedi a folyamatot továbbhaladni, így várakoztatáshoz használható. A \texttt{<receive>} típusú XML elemekhez tartozó sémaleírás:\\
@@ -94,27 +96,29 @@ A grafikus megjelenítése \aref{fig:invoke}. ábrán látható.
 
 Használatát a programrészek újrafelhasználhatósága indokolja, valamint az átláthatósági alapelvek. Például, az ábrán látható CCvalidation használható ATM-es pénz felvét, egyenleglekérdezés, vagy egyéb ATM nél végezhető művelet során. 
 
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.6]{images/invokenet.png}
+\caption{Az \texttt{invoke} leképzése petri hálóra}
+\label{fig:invoke}
+\end{figure}
+
 Leképzés során ügyelni kell arra, hogy az \texttt{invoke} paramétereinek megfelelő tokenek keletkezzenek és legyenek átadva a részháló start elemének.
 \section{\texttt{<assign>}}
 
 \texttt{<assign>} Egy változó értékadására szolgáló esemény. Ellentétben egy imperatív értékadással egy \texttt{assign} blokkban bármennyi értékadás, másolás történhet, amíg azt a kliens kezelni tudja, így logikailag egy egységbe zárja a műveleteket.  
 \begin{verbatim}
 <assign validate="yes|no"? standard-attributes>
-   standard-elements
    (
-   <copy keepSrcElementName="yes|no"? ignoreMissingFromData="yes|no"?>
-      from-spec
-      to-spec
+   <copy keepSrcElementName="yes|no"? 
+  	from-spec
+  	to-spec
    </copy>
-   |
-   <extensionAssignOperation>
-      assign-element-of-other-namespace
-   </extensionAssignOperation>
-   )+
 </assign>
 \end{verbatim}
 Az érték hozzárendelése nagyon egszerűen átírható egy tranzicióra ami a megfelelő tokenek színét módosítja. 
 A grafikus megjelenítése \aref{fig:assign}. ábrán látható.
+A színmódosítás egyszerűen a token nevének átírását jelenti. 
 
 \begin{figure}[h!]
 \centering
