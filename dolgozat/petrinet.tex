@@ -7,7 +7,7 @@ A modellt Carl Adam Petri készítette.
 A modell nagyon hasonlít a programozók körében elterjedt folyamat ábrára.
 A háló irányított élekből, helyekből és átmenetekből (\textsl{mint elemek}) áll.
 Az élek csak két különböző típusú elem között állhatnak.
-A helyeken pontok, úgynevezett tokenek állhatnak.
+A helyeken jelölő objektumok, úgynevezett tokenek állhatnak.
 A tokenek csak diszkrét számban fordulhatnak elő egy helyen, és a token átvitele atomi folyamat, azaz nem félbeszakítható.
 A tokenek elláthatóak attribútummal is, ilyen esetben a tokeneket "kiszínezzük" és színezett petri hálóról beszélünk. %TODO (LINK!)
 
@@ -43,7 +43,7 @@ struktúra, ahol
 
 Adott $CPN(P, T, A, \Sigma, V, C, G, E, S)$ színezett hálóhoz az alábbi kezelő funkciók köthetőek: 
 \begin{itemize}
-\item $M(p)$: a jelölő (\textit{marker}) függvény, melynek értéke a $p$ helyhez kapcsolódó tokenek halmaza. (Színezett Petri háló esetén az $M(p)$ elemek színeinek illeszkedni kell a $C(p)$ színhalmazhoz),
+\item $M(p)$: a jelölő (\textit{marker}) függvény, melynek értéke a $p$ helyhez kapcsolódó tokenek halmaza (színezett Petri háló esetén az $M(p)$ elemek színeinek illeszkedni kell a $C(p)$ színhalmazhoz),
 \item $M_0(p)$: helyek induló tokenkészlete,
 \item $Var(t)$: a tranzíciók viselkedését leíró változók halmaza,
 \item $b(v)$: az adott $v$ változó értékét megadó kifejezés, ahol $b(v) \in Type[v]$.
@@ -76,11 +76,10 @@ A hierarchikus CPN rendszerben az átláthatóság növelése érdekében össze
 
 \begin{figure}[h!]
 \centering
-%\includegraphics[scale=1]{images/???.png}
+\includegraphics[scale=0.5]{images/rendszersema3modul.png}
 \caption{Rendszerséma 3 modullal}
 \label{fig:schema}
 \end{figure}
-%TODO Insert "rendszerséma 3 modullal.png" & 2A receiver belső szerkezete.png"
 
 A moduloknál fontos szerepet kapnak az átadó helyek, melyeken keresztül a tokenek bejöhetnek a modulba illetve kiléphetnek a modulból. Az ilyen port jellegű helyek lehetnek bemeneti portok (IN) illetve kimeneti portok (OUT).  
 

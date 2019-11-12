@@ -16,13 +16,13 @@ Az elemi tevékenységekből összetett folyamatok építhetőek fel szekvencia,
 A BPEL szabvány tevékenység készletének bemutatásánál csak a legfontosabb elemekre térünk most ki. A szabvány részletei a
 http://docs.oasis-open.org/wsbpel/2.0/OS/wsbpel-v2.0-OS.html weboldalról érhetőek el. 
 
-A BPEL definíció egyértelműsíti a folyamat kezdetét és inicializálja is a megfelelő paraméterekkel. A Petri háló erre nem tér ki, ezért bevezetünk egy opcionális \textit{START} trnazíciót. Ennek feladata, a megfelelő tokenek legenerálása a folyamat indításához. A folyamat zárása szintén egyértelmű a BPEL szabványban. Petri háló kapcsán beszélhetünk a háló leállásáról, ha már semmilyen hely és tranzíció nem produkál új tokent, nem várakozik és nem nyel el tokent. A köztes elemek leképzése általánosan nem bonyolult, de megvizsgálhatók alternatív leképzési módok. 
+A BPEL definíció egyértelműsíti a folyamat kezdetét és inicializálja is a megfelelő paraméterekkel. A Petri háló erre nem tér ki, ezért bevezetünk egy opcionális \textit{START} tranazíciót. Ennek feladata, a megfelelő tokenek legenerálása a folyamat indításához. A folyamat zárása szintén egyértelmű a BPEL szabványban. Petri háló kapcsán beszélhetünk a háló leállásáról, ha már semmilyen hely és tranzíció nem produkál új tokent, nem várakozik és nem nyel el tokent. A köztes elemek leképzése általánosan nem bonyolult, de megvizsgálhatók alternatív leképzési módok. 
 
-(Jelölésrendszer: A rendszer a helyeket P-vel, míg a tranzíciókat T-vel indexeli. A helyek után listázza az adott helyen levő tokeneket. A jelenleg lépésben levő tranzíciók pedig színes kitöltést kapnak. )
+Az alkalmazás jelölésrendszere: A rendszer a helyeket P-vel, míg a tranzíciókat T-vel indexeli. A helyek után listázza az adott helyen levő tokeneket. A jelenleg lépésben levő tranzíciók pedig színes kitöltést kapnak.
 
 \section{\texttt{<receive>}}
 
-\texttt{<receive>} A recieve egy megfelelő üzenet után engedi a folyamatot továbbhaladni, így várakoztatáshoz használható. A \texttt{<receive>} típusú XML elemekhez tartozó sémaleírás:\\
+Egy megfelelő üzenet után engedi a folyamatot továbbhaladni, így várakoztatáshoz használható. A \texttt{<receive>} típusú XML elemekhez tartozó sémaleírás:\\
 \begin{verbatim}
 <receive partnerLink="NCName"
    portType="QName"?
@@ -37,7 +37,7 @@ A BPEL definíció egyértelműsíti a folyamat kezdetét és inicializálja is 
 A hálóban ezt egy tranzicióval könnyedén megoldhatjuk, hiszen csak egy specifikus üzenet token kell a továbblépéshez, és a többit addig az előző helyen parkoltatja. 
 
 \section{\texttt{<reply>}}
-\texttt{<reply>} A reply egy üzenetküldő elem, ami \texttt{<receive>; <onMessage>;<onEvent>} események után léphet akcióba. 
+Üzenetküldő elem, ami \texttt{<receive>; <onMessage>;<onEvent>} események után léphet akcióba. 
 \begin{verbatim}
 <reply partnerLink="NCName"
    portType="QName"?
@@ -52,7 +52,7 @@ A hálóban ezt egy tranzicióval könnyedén megoldhatjuk, hiszen csak egy spec
 A lekezelése az előző példával analóg módon, annyi különbséggel, hogy a tokenek nem parkolnak, hanem tovább mennek és a tranzíció csak akkor generál új tokent ha üzenetet kap egy ágról.
 
 \section{\texttt{<invoke>}}
-\texttt{<invoke>} Egy BPEL vagy épp egy webszolgáltatás meghívására szolgál és definiálja a szolgáltatás feladatát is. 
+Egy BPEL vagy épp egy webszolgáltatás meghívására szolgál és definiálja a szolgáltatás feladatát is. 
 \begin{verbatim}
 <invoke partnerLink="NCName"
    portType="QName"?
@@ -83,15 +83,15 @@ Használatát a programrészek újrafelhasználhatósága indokolja, valamint az
 
 \begin{figure}[h!]
 \centering
-\includegraphics[scale=0.6]{images/invokenet.png}
-\caption{Az \texttt{invoke} leképzése petri hálóra}
+\includegraphics[scale=0.4]{images/invokenet.png}
+\caption{Az \texttt{<invoke>} leképzése petri hálóra}
 \label{fig:invokenet}
 \end{figure}
 Leképzés során ügyelni kell arra, hogy az \texttt{invoke} paramétereinek megfelelő tokenek keletkezzenek és legyenek átadva a részháló start elemének.
 
 \section{\texttt{<assign>}}
 
-\texttt{<assign>} Egy változó értékadására szolgáló esemény. Ellentétben egy imperatív értékadással egy \texttt{assign} blokkban bármennyi értékadás, másolás történhet, amíg azt a kliens kezelni tudja, így logikailag egy egységbe zárja a műveleteket.  
+Egy változó értékadására szolgáló esemény. Ellentétben egy imperatív értékadással egy \texttt{<assign>} blokkban bármennyi értékadás, másolás történhet, amíg azt a kliens kezelni tudja, így logikailag egy egységbe zárja a műveleteket.  
 \begin{verbatim}
 <assign validate="yes|no"? standard-attributes>
    (
@@ -113,15 +113,14 @@ A színmódosítás egyszerűen a token nevének átírását jelenti.
 
 \begin{figure}[h!]
 \centering
-\includegraphics[scale=0.6]{images/assignnet.png}
+\includegraphics[scale=0.4]{images/assignnet.png}
 \caption{Az \texttt{assign} leképzése petri hálóra}
 \label{fig:assignnet}
 \end{figure}
 Az ábrán egy változós értékadásra látható példa. Hasonló módon kezelendő a  blokkosított értékadás, a különbség, hogy a több token jöhet és távozhat több forrásba is.
 
 \section{\texttt{<validate>}}
-
-\texttt{<validate>} Egy sémára validálja az XML (BPEL) állományt. 
+Egy sémára validálja az XML (BPEL) állományt. 
 \begin{verbatim}
 <validate variables="BPELVariableNames" standard-attributes>
    standard-elements
@@ -130,7 +129,6 @@ Az ábrán egy változós értékadásra látható példa. Hasonló módon kezel
 Mivel a Petri háló nem tartalmaz validációs elemeket, ezért a \texttt{<validate>} nem képződik le. 
 
 \section{\texttt{<throw>}}
-
 Egy rész processzen belül fault generálására szolgál. 
 \begin{verbatim}
 <throw faultName="QName"
@@ -142,8 +140,7 @@ Egy rész processzen belül fault generálására szolgál.
 Nagyon egyszerűen egy \textit{fault} tokent generáló tranzició komponens. Explicit hálórésze nincs, hanem a megfelelő inputtokenek megléte vagy hiánya generálja egy tranzició során. 
 
 \section{\texttt{<wait>}}
-
-\texttt{<wait>} Időre vonatkoztatva várakoztat. Például 5000 tick vagy 14:00:23 (hh:mm:ss)
+Időre vonatkoztatva várakoztat. Például 5000 tick vagy 14:00:23 (hh:mm:ss)
 \begin{verbatim} 
 <wait standard-attributes>
    standard-elements
@@ -157,7 +154,7 @@ Nagyon egyszerűen egy \textit{fault} tokent generáló tranzició komponens. Ex
 Megadható egy részhálóval ami valójában egy oszcillátor és a megfelelő iteráció után folytat tokent küld. Továbbá létezik úgynevezett időérzékeny háló, ahol az elemek tokenátadási sebessége ismert, vagy állítható. Ezzel időzítőt lehet létrehozni. Esetenként hardware-es óra is használható
 
 \section{\texttt{<empty>}}
-\texttt{<empty>} No-op (\textit{no operations}) esemény szinkronizációra szolgál.
+No-op (\textit{no operations}) esemény szinkronizációra szolgál.
 \begin{verbatim}
 <empty standard-attributes>
    standard-elements
@@ -166,8 +163,7 @@ Megadható egy részhálóval ami valójában egy oszcillátor és a megfelelő 
 Beiktatható egy semleges tranzició és hely.
 
 \section{\texttt{<sequence>}}
-
-\texttt{<sequence>} Sorozatot ad meg.
+Sorozatot ad meg.
 \begin{verbatim}
 <sequence standard-attributes>
    standard-elements
@@ -212,7 +208,7 @@ A PBEL-es grafikus megjelenítése \aref{fig:if}. ábrán látható.
 \end{figure}
 
 \section{\texttt{<while>}}
-\texttt{<while>} elöltesztelős ciklus. Végre hajt amíg az iterációs feltétel igaznak értékelődik ki. 
+Elöltesztelős ciklus. Addig iterál, amíg az ciklus feltétel igaznak értékelődik ki. 
 \begin{verbatim}
 <while standard-attributes>
    <condition>bool-expr</condition>
@@ -222,7 +218,7 @@ A PBEL-es grafikus megjelenítése \aref{fig:if}. ábrán látható.
 Egy tranzició, mely token függvényében a folyamat egy korábbi pontjára csatol vissza, vagy éppen egy későbbire, a feltétel hamis logikai állapota esetén. A feltétel persze egy színes token jelenléte, vagy tokenek száma is lehet. 
 
 \section{\texttt{<repeatUntil>}}
-\texttt{<repeatUntil>} Egy hátultesztelő ciklusnak feleltethető amely akkor enged tovább, ha a feltétel igaz. 
+Egy hátultesztelős ciklusnak feleltethető meg, amely akkor enged tovább, ha a feltétel igaz. 
 \begin{verbatim}
 <repeatUntil standard-attributes>
    standard-elements
@@ -230,7 +226,7 @@ Egy tranzició, mely token függvényében a folyamat egy korábbi pontjára csa
    <condition expressionLanguage="anyURI"?>bool-expr</condition>
 </repeatUntil>
 \end{verbatim}
-A \texttt{while}-al analóg módon megadható.
+A \texttt{<while>}-al analóg módon megadható a Petri-hálós leképzése.
 
 \section{\texttt{<forEach>}}
 Végig iterál a gyerekelemeken. Megadható párhuzamos feldolgozás is. Egy \textit{Complete condition} segítségével megadható egy break utasítás ami kilép a ciklusból. 

@@ -4,25 +4,25 @@
 
 A BPEL szabvány alapjai a 2000-es évek közepén jöttek létre az üzleti folyamatok szabványos leírására, elsősorban a Web szolgáltatás (\textit{Web Service}, a továbbiakban röviden WS) alapú környezetre fókuszálva \cite{andrews2003business}. A nyelv célja definiálni az  egyes WS folyamatok vezérlését, koordinálását a kívánt üzleti logika megvalósítására.  A BPEL modell magja  a folyamatok leírására szolgál, melyekhez együttműködő partnereket szimbolizáló modulok kapcsolódhatnak. A folyamaton belüli lépéseket, végrehajtási algoritmust az aktivitási elemekkel írhatjuk le. A folyamatokhoz változók is rendelhetőek, melyek a kapcsolódó adatkezelést reprezentálják. Az egyes processz modulok üzenetváltással kommunikálhatnak egymással.   
 
-A BPEL nyelv a WS környezetből adódóan szorosan kötődik az XML alapú adattároláshoz. A BPEL modell XM állományként áll elő, melyben az egyes séma megkötéseket az XMLSchema szabvány biztosítja. Az XMLSchema nyelv lehetővé teszi az XML dokumentumok strukturális és tartalmi ellenőrzését. A sémanyelv  gazdag integritási elem készlettel rendelkezik és támogatja a típusok származtatását is. A elemi adatkezelő műveletek, szabályok és kifejezések megadásánál az XPath szabványt kell alkalmazni.  
+A BPEL nyelv a WS környezetből adódóan szorosan kötődik az XML alapú adattároláshoz. A BPEL modell XM állományként áll elő, melyben az egyes séma megkötéseket az XMLSchema szabvány biztosítja. Az XMLSchema nyelv lehetővé teszi az XML dokumentumok strukturális és tartalmi ellenőrzését. A sémanyelv  gazdag integritási elem készlettel rendelkezik és támogatja a típusok származtatását is. Az elemi adatkezelő műveletek, szabályok és kifejezések megadásánál az XPath szabványt kell alkalmazni.  
 
 A BPEL nyelv tulajdonságaival és alkalmazási lehetőségeivel számos kutatás foglalkozott már az elmúlt évtizedben. A BPEL nyelv nagy előnye a deklaratív formalizmus, mellyel nem szükséges  az egyes modulok kódjába beleégetni az üzleti szabályokat. Az elosztott környezet esetén fontos, hogy az egyes üzleti szabályok illeszthetőek, integrálhatóak és validálhatóak legyenek \cite{rosenberg2005business}. A BPEL modell fejlesztése ezen célkitűzések teljesítésére irányult. Több dolgozatban (például \cite{ouyang2006translating}) a BPEL nyelv, mint cél modellezési nyelv jelenik meg, s más szabvány folyamat modellezési nyelv, mint UML, BPEL-re történő konvertálását vizsgálják.   
 
-A létrehozott BPEL modellnyelv tulajdonságait és alkalmazhatóságát  aktívan vizsgáltak a 2000-es évek második felében. Ennek keretében a \cite{baresi2005towards} dolgozat az elkészített BPEL modellek dinamikus nyomkövetésére, monitorizására mutat be hatékony algoritmusokat. A modell főbb elágazási és szinkronizációs elemeihez kapcsolódó elemzéseket a \cite{ouyang2005wofbpel} dolgozat foglalja össze. A BPEL üzleti folyamatok magasabb szintű, a folyamat egységteszt alapú elemzésére ad javaslatot a \cite{mayer2006towards}.
+A létrehozott BPEL modellnyelv tulajdonságait és alkalmazhatóságát  aktívan vizsgálták a 2000-es évek második felében. Ennek keretében a \cite{baresi2005towards} dolgozat az elkészített BPEL modellek dinamikus nyomkövetésére, monitorizására mutat be hatékony algoritmusokat. A modell főbb elágazási és szinkronizációs elemeihez kapcsolódó elemzéseket a \cite{ouyang2005wofbpel} dolgozat foglalja össze. A BPEL üzleti folyamatok magasabb szintű, a folyamat egységteszt alapú elemzésére ad javaslatot a \cite{mayer2006towards}.
 
-A BPEL nyelv egyik gyakori alkalmazási területe a workflow rendszerek fejlesztése. Több irányban is történtek lépések, hogy a BPEL munkafolyamat modelljét különböző alkalmazási területeken használják. Ezen kísérletek között megemlíthetők a grid és tudományos  workflow folyamatok \cite{slominski2007adapting}, és a mobil alkalmazások fejlesztése \cite{hackmann2006sliver}. A témakörhöz kapcsolódóan megemlíthető, hogy sokan a BPEL-t tekintették az univerzális workflow leíró nyelvnek, s javaslatok is születtek a BPEL központú workflow szemléletre \cite{van2008translating}. A  hazai vonatkozású fejlesztések körében kiemelhető a BPEL rendszerek formális validációjára irányuló vizsgálatok köre \cite{kovacs2008formal}. A validációs elemzések mellett a modell komplexitás meghatározására is találunk példákat a nemzetközi irodalomban  \cite{cardoso2007complexity}. 
+A BPEL nyelv egyik gyakori alkalmazási területe a workflow rendszerek fejlesztése. Több irányban is történtek lépések, hogy a BPEL munkafolyamat modelljét különböző alkalmazási területeken használják. Ezen kísérletek között megemlíthetők a grid és tudományos  workflow folyamatok \cite{slominski2007adapting} és a mobil alkalmazások fejlesztése \cite{hackmann2006sliver}. A témakörhöz kapcsolódóan megemlíthető, hogy sokan a BPEL-t tekintették az univerzális workflow leíró nyelvnek, s javaslatok is születtek a BPEL központú workflow szemléletre \cite{van2008translating}. A  hazai vonatkozású fejlesztések körében kiemelhető a BPEL rendszerek formális validációjára irányuló vizsgálatok köre \cite{kovacs2008formal}. A validációs elemzések mellett a modell komplexitás meghatározására is találunk példákat a nemzetközi irodalomban  \cite{cardoso2007complexity}. 
 \newpage
 BPEL nyelv kiterjesztésére is több dolgoztat született, mint például az elosztott rendszerekre történő kiterjesztés \cite{baresi2007towards}. A kiterjesztések körét a \cite{kopp2011classification} dolgozat foglalja össze. Ennek az egyes kritériumait és karakterisztikáját \aref{tab:bpel_characteristics}. táblázat foglalja össze.
 
 \begin{table}[h!]
 \centering
-\caption{A BPEL-el szemben támasztott követelmények és azok karakterisztikái.}
+\caption{A BPEL kiterjesztéseinek összefoglaló táblázata.}
 \label{tab:bpel_characteristics}
 \begin{tabular}{|c|c|}
 \hline
-\textbf{Kritérium} & \textbf{Karakterisztika}\\
+\textbf{Terület} & \textbf{Paraméterek}\\
 \hline
-\multirow{8}{7em}{Cél} & Lehetőség a kiszervezésre\\
+\multirow{8}{7em}{Kritériumok} & Lehetőség a kiszervezésre\\
 & Rugalmasság\\
 & Funkcionalitás\\
 & Fenntarthatóság\\
@@ -31,7 +31,7 @@ BPEL nyelv kiterjesztésére is több dolgoztat született, mint például az el
 & Robusztusság\\
 & Használhatóság\\
 \hline
-\multirow{8}{7em}{Tárgy} & Vezérlési folyam\\
+\multirow{8}{7em}{Felhasználás} & Vezérlési folyam\\
 & Adatintegráció\\
 & Kifejezések és hozzárendelő utasítások\\
 & Nagy mennyiségű adat kezelése\\

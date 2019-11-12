@@ -16,29 +16,24 @@
 \BOOKMARK [1][-]{section.4.10}{<sequence>}{chapter.4}% 16
 \BOOKMARK [1][-]{section.4.11}{<if>}{chapter.4}% 17
 \BOOKMARK [1][-]{section.4.12}{<while>}{chapter.4}% 18
-\BOOKMARK [1][-]{section.4.13}{<while>}{chapter.4}% 19
-\BOOKMARK [1][-]{section.4.14}{<repeatUntil>}{chapter.4}% 20
-\BOOKMARK [1][-]{section.4.15}{<forEach>}{chapter.4}% 21
-\BOOKMARK [1][-]{section.4.16}{<pick>}{chapter.4}% 22
-\BOOKMARK [1][-]{section.4.17}{<flow>}{chapter.4}% 23
-\BOOKMARK [1][-]{section.4.18}{<scope>}{chapter.4}% 24
-\BOOKMARK [1][-]{section.4.19}{<compensateScope>}{chapter.4}% 25
-\BOOKMARK [1][-]{section.4.20}{<compensate>}{chapter.4}% 26
-\BOOKMARK [1][-]{section.4.21}{<rethrow>}{chapter.4}% 27
-\BOOKMARK [1][-]{section.4.22}{<extensionActivity>}{chapter.4}% 28
-\BOOKMARK [0][-]{chapter.5}{Szimul\341ci\363s \351s valid\341ci\363s keretrendszer}{}% 29
-\BOOKMARK [1][-]{section.5.1}{Elv\341r\341sok az alkalmaz\341ssal szemben}{chapter.5}% 30
-\BOOKMARK [1][-]{section.5.2}{Az alkalmaz\341s fel\351p\355t\351se}{chapter.5}% 31
-\BOOKMARK [0][-]{chapter.6}{Az alkalmaz\341s implement\341ci\363ja}{}% 32
-\BOOKMARK [1][-]{section.6.1}{C\043 implement\341ci\363}{chapter.6}% 33
-\BOOKMARK [1][-]{section.6.2}{Python implement\341ci\363}{chapter.6}% 34
-\BOOKMARK [1][-]{section.6.3}{Tesztel\351s, tapasztalatok}{chapter.6}% 35
-\BOOKMARK [0][-]{chapter.7}{A h\341l\363n v\351gezheto elemz\351sek}{}% 36
-\BOOKMARK [1][-]{section.7.1}{H\341l\363 korl\341toss\341g \351s puffer kapacit\341si ellenorz\351s}{chapter.7}% 37
-\BOOKMARK [1][-]{section.7.2}{Saj\341t modell alaph\341l\363ra}{chapter.7}% 38
-\BOOKMARK [1][-]{section.7.3}{Az alkalmazott, kibov\355tett modell sz\355nezett h\341l\363ra}{chapter.7}% 39
-\BOOKMARK [1][-]{section.7.4}{A valid\341ci\363s sz\341m\355t\341s algoritmusa}{chapter.7}% 40
-\BOOKMARK [1][-]{section.7.5}{Mintafeladat}{chapter.7}% 41
-\BOOKMARK [0][-]{chapter.8}{\326sszegz\351s}{}% 42
-\BOOKMARK [0][-]{chapter.9}{Mell\351kletek}{}% 43
-\BOOKMARK [1][-]{section.9.1}{WSDL szabv\341ny a BPEL sz\341m\341ra}{chapter.9}% 44
+\BOOKMARK [1][-]{section.4.13}{<repeatUntil>}{chapter.4}% 19
+\BOOKMARK [1][-]{section.4.14}{<forEach>}{chapter.4}% 20
+\BOOKMARK [1][-]{section.4.15}{<pick>}{chapter.4}% 21
+\BOOKMARK [1][-]{section.4.16}{<flow>}{chapter.4}% 22
+\BOOKMARK [1][-]{section.4.17}{<scope>}{chapter.4}% 23
+\BOOKMARK [0][-]{chapter.5}{Szimul\341ci\363s \351s valid\341ci\363s keretrendszer}{}% 24
+\BOOKMARK [1][-]{section.5.1}{Elv\341r\341sok az alkalmaz\341ssal szemben}{chapter.5}% 25
+\BOOKMARK [1][-]{section.5.2}{Az alkalmaz\341s fel\351p\355t\351se}{chapter.5}% 26
+\BOOKMARK [0][-]{chapter.6}{Az alkalmaz\341s implement\341ci\363ja}{}% 27
+\BOOKMARK [1][-]{section.6.1}{C\043 implement\341ci\363}{chapter.6}% 28
+\BOOKMARK [1][-]{section.6.2}{Python implement\341ci\363}{chapter.6}% 29
+\BOOKMARK [1][-]{section.6.3}{Tesztel\351s, tapasztalatok}{chapter.6}% 30
+\BOOKMARK [0][-]{chapter.7}{A h\341l\363n v\351gezheto elemz\351sek}{}% 31
+\BOOKMARK [1][-]{section.7.1}{H\341l\363 korl\341toss\341g \351s puffer kapacit\341si ellenorz\351s}{chapter.7}% 32
+\BOOKMARK [1][-]{section.7.2}{Saj\341t modell alaph\341l\363ra}{chapter.7}% 33
+\BOOKMARK [1][-]{section.7.3}{Az alkalmazott, kibov\355tett modell sz\355nezett h\341l\363ra}{chapter.7}% 34
+\BOOKMARK [1][-]{section.7.4}{A valid\341ci\363s sz\341m\355t\341s algoritmusa}{chapter.7}% 35
+\BOOKMARK [1][-]{section.7.5}{Mintafeladat}{chapter.7}% 36
+\BOOKMARK [0][-]{chapter.8}{\326sszegz\351s}{}% 37
+\BOOKMARK [0][-]{chapter.9}{Mell\351kletek}{}% 38
+\BOOKMARK [1][-]{section.9.1}{WSDL szabv\341ny a BPEL sz\341m\341ra}{chapter.9}% 39

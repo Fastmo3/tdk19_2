@@ -2,7 +2,7 @@
 
 
 \chapter{Bevezetés}
-A BPEL (\textit{Business Process Execution Language}) nyelv létrejötte elsődlegesen a Web szolgáltatások területéhez kapcsolódik, de a nyelv mint általános munkafolyamat (\textit{workflow}) leíró nyelv, más alkalmazási témakörhöz is köthető. A BPEL szerepét fontosságát, jól mutatja az a tény is, hogy igen gazdag irodalom található az egyes alkalmazási területekről és speciális szabvány kiegészítésekről.
+A BPEL (\textit{Business Process Execution Language}) nyelv létrejötte elsődlegesen a Web szolgáltatások területéhez kapcsolódik, de a nyelv mint általános munkafolyamat (\textit{workflow}) leíró nyelv, más alkalmazási témakörökhöz is köthető. A BPEL szerepét, fontosságát jól mutatja az a tény is, hogy igen gazdag irodalom található az egyes alkalmazási területekről és speciális szabvány kiegészítésekről.
 %TODO Ide kellenének a hivatkozások néhány irodalomról!
 
 A  BPEL aktualitását jelzi, hogy a megvalósító motorok köre is folyamatosan bővül. Ugyan már lassan 15 év eltelt a szabvány bevezetése óta, a meglévő nagyobb rendszerek (Oracle BPEL Process Manager, IBM WebSphere Process Server, Microsoft BizTalk Server, SAP SAP Exchange Infrastructure) alternatívájaként  most is jelennek meg új végrehajtó motor implementációk. A Wikipédia forrása szerint \cite{wikiBpelList} a közelmúltban az alábbi szabad szotver implementációk születtek (\ref{tab:bpel_softwares}. táblázat).
@@ -26,6 +26,6 @@ Annak ellenére, hogy napjainkra már több BPEL motor elérhető és használat
 %TODO Be kellene hivatkozni, hogy hol hívják ezt bounded modelnek!
 vizsgálja. A korlátosság azt jelzi, hogy minden csomópontban van egy felső korlát a végrehajtható feladatok számára, intenzitására vonatkozóan. Ha a rendszer nem teljesíti ezt a kritériumot, akkor túlcsordul valamely megmunkáló/tároló helyen. Az elemzés során a korlátosság ténye mellett, a korlát értékei is fontos vizsgálandó jellemzők. 
 
-A meglévő tervezői rendszerekben legtöbbször szimulációval történik a főbb paraméterek, a korlátosság vizsgálata. Ezen megközelítésnek rendszerint két problémája van: az vizsgálat teljessége (azaz valóban minden lehetséges esetet áttekintettük-e) illetve a végrehajtási idő (a szimulációk futtatása hosszabb időt is igénybe vehet).
+A meglévő tervezői rendszerekben legtöbbször szimulációval történik a főbb paraméterek, a korlátosság vizsgálata. Ezen megközelítésnek rendszerint két problémája van: a vizsgálat teljessége (azaz valóban minden lehetséges esetet áttekintettük-e) illetve a végrehajtási idő (a szimulációk futtatása hosszabb időt is igénybe vehet).
 
 A dolgozatban a BPEL folyamatok Petri-háló alapú vizsgálatát végzem el. A Petri-háló alapú reprezentáció egy elfogadott és többek által alkalmazott megközelítés. A kidolgozott rendszer inputként egy  BPEL modell leírását várja és kimenetként az elemzés eredményét illetve a folyamatok nyomkövetését adja vissza.
