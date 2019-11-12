@@ -28,44 +28,30 @@ A BPEL definíció egyértelműsíti a folyamat kezdetét és inicializálja is 
    portType="QName"?
    operation="NCName"
    variable="BPELVariableName"?
-   createInstance="yes|no"?
-   messageExchange="NCName"?
-   standard-attributes>
-   standard-elements
-   <correlations>?
-      <correlation set="NCName" initiate="yes|join|no"? />+
-   </correlations>
+   messageExchange="NCName"?>
    <fromParts>?
-      <fromPart part="NCName" toVariable="BPELVariableName" />+
+      <fromPart part="NCName" toVariable="BPELVariableNm"/>+
    </fromParts>
 </receive>
 \end{verbatim}
 A hálóban ezt egy tranzicióval könnyedén megoldhatjuk, hiszen csak egy specifikus üzenet token kell a továbblépéshez, és a többit addig az előző helyen parkoltatja. 
 
 \section{\texttt{<reply>}}
-
 \texttt{<reply>} A reply egy üzenetküldő elem, ami \texttt{<receive>; <onMessage>;<onEvent>} események után léphet akcióba. 
 \begin{verbatim}
 <reply partnerLink="NCName"
    portType="QName"?
    operation="NCName"
    variable="BPELVariableName"?
-   faultName="QName"?
-   messageExchange="NCName"?
-   standard-attributes>
-   standard-elements
-   <correlations>?
-      <correlation set="NCName" initiate="yes|join|no"? />+
-   </correlations>
+   messageExchange="NCName"?>
    <toParts>?
-      <toPart part="NCName" fromVariable="BPELVariableName" />+
+      <toPart part="NCName" fromVariable="BPELVariableNm"/>+
    </toParts>
 </reply>
 \end{verbatim}
 A lekezelése az előző példával analóg módon, annyi különbséggel, hogy a tokenek nem parkolnak, hanem tovább mennek és a tranzíció csak akkor generál új tokent ha üzenetet kap egy ágról.
 
 \section{\texttt{<invoke>}}
-
 \texttt{<invoke>} Egy BPEL vagy épp egy webszolgáltatás meghívására szolgál és definiálja a szolgáltatás feladatát is. 
 \begin{verbatim}
 <invoke partnerLink="NCName"
@@ -83,7 +69,6 @@ A lekezelése az előző példával analóg módon, annyi különbséggel, hogy 
       <fromPart part="NCName" toVariable="BPELVariableNm"/>+
    </fromParts>
 </invoke>
-
 \end{verbatim}
 A grafikus megjelenítése \aref{fig:invoke}. ábrán látható.
 
@@ -100,10 +85,10 @@ Használatát a programrészek újrafelhasználhatósága indokolja, valamint az
 \centering
 \includegraphics[scale=0.6]{images/invokenet.png}
 \caption{Az \texttt{invoke} leképzése petri hálóra}
-\label{fig:invoke}
+\label{fig:invokenet}
 \end{figure}
-
 Leképzés során ügyelni kell arra, hogy az \texttt{invoke} paramétereinek megfelelő tokenek keletkezzenek és legyenek átadva a részháló start elemének.
+
 \section{\texttt{<assign>}}
 
 \texttt{<assign>} Egy változó értékadására szolgáló esemény. Ellentétben egy imperatív értékadással egy \texttt{assign} blokkban bármennyi értékadás, másolás történhet, amíg azt a kliens kezelni tudja, így logikailag egy egységbe zárja a műveleteket.  
@@ -119,13 +104,20 @@ Leképzés során ügyelni kell arra, hogy az \texttt{invoke} paramétereinek me
 Az érték hozzárendelése nagyon egszerűen átírható egy tranzicióra ami a megfelelő tokenek színét módosítja. 
 A grafikus megjelenítése \aref{fig:assign}. ábrán látható.
 A színmódosítás egyszerűen a token nevének átírását jelenti. 
-
 \begin{figure}[h!]
 \centering
 \includegraphics[scale=1]{images/assign.png}
 \caption{Az \texttt{assign} grafikus jelölése az Oracle BPEL designer-ben}
 \label{fig:assign}
 \end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.6]{images/assignnet.png}
+\caption{Az \texttt{assign} leképzése petri hálóra}
+\label{fig:assignnet}
+\end{figure}
+Az ábrán egy változós értékadásra látható példa. Hasonló módon kezelendő a  blokkosított értékadás, a különbség, hogy a több token jöhet és távozhat több forrásba is.
 
 \section{\texttt{<validate>}}
 
@@ -135,6 +127,7 @@ A színmódosítás egyszerűen a token nevének átírását jelenti.
    standard-elements
 </validate>
 \end{verbatim}
+Mivel a Petri háló nem tartalmaz validációs elemeket, ezért a \texttt{<validate>} nem képződik le. 
 
 \section{\texttt{<throw>}}
 
@@ -161,10 +154,9 @@ Nagyon egyszerűen egy \textit{fault} tokent generáló tranzició komponens. Ex
    )
 </wait>
 \end{verbatim}
-Megadható egy részhálóval ami valójában egy oszcillátor és a megfelelő iteráció után folytat tokent küld. 
+Megadható egy részhálóval ami valójában egy oszcillátor és a megfelelő iteráció után folytat tokent küld. Továbbá létezik úgynevezett időérzékeny háló, ahol az elemek tokenátadási sebessége ismert, vagy állítható. Ezzel időzítőt lehet létrehozni. Esetenként hardware-es óra is használható
 
 \section{\texttt{<empty>}}
-
 \texttt{<empty>} No-op (\textit{no operations}) esemény szinkronizációra szolgál.
 \begin{verbatim}
 <empty standard-attributes>
@@ -190,19 +182,19 @@ Egyszerűen csak tranziciók és helyek összefűzése.
 \begin{verbatim}
 <if standard-attributes>
    standard-elements
-   <condition expressionLanguage="anyURI"?>bool-expr</condition>
+   <condition >bool-expr</condition>
    activity
    <elseif>*
-      <condition expressionLanguage="anyURI"?>bool-expr</condition>
-      activity
+      <condition>bool-expr</condition>
+  	activity
    </elseif>
    <else>?
-      activity
+  	activity
    </else>
 </if>
 \end{verbatim}
-Egy tranzició, mely tokenek függvényében más felé küldi tovább, vagy generál tokeneket. Analóg módon egy \textit{Switch-Case} elágazás is definiálható vele.
-A grafikus megjelenítése \aref{fig:if}. ábrán látható.
+Egy tranzició, mely tokenek függvényében más felé küldi tovább, vagy generál tokeneket. Ez lehet egy helyen összegyúlt tokenek mennyisége, vagy egy adott helyen egy specifikus színű token megléte, vagy nemléte. Analóg módon egy \textit{Switch-Case} elágazás is definiálható vele.
+A PBEL-es grafikus megjelenítése \aref{fig:if}. ábrán látható.
 
 \begin{figure}[h!]
 \centering
@@ -211,20 +203,25 @@ A grafikus megjelenítése \aref{fig:if}. ábrán látható.
 \label{fig:if}
 \end{figure}
 
-\section{\texttt{<while>}}
 
-\texttt{<while>} elöltesztelő ciklus. Végre hajt amíg az iterációs feltétel igaznak értékelődik ki. 
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.4]{images/ifnet.png}
+\caption{Az \texttt{if} Egy hálóképzése}
+\label{fig:ifnet}
+\end{figure}
+
+\section{\texttt{<while>}}
+\texttt{<while>} elöltesztelős ciklus. Végre hajt amíg az iterációs feltétel igaznak értékelődik ki. 
 \begin{verbatim}
 <while standard-attributes>
-   standard-elements
-   <condition expressionLanguage="anyURI"?>bool-expr</condition>
+   <condition>bool-expr</condition>
    activity
 </while>
 \end{verbatim}
 Egy tranzició, mely token függvényében a folyamat egy korábbi pontjára csatol vissza, vagy éppen egy későbbire, a feltétel hamis logikai állapota esetén. A feltétel persze egy színes token jelenléte, vagy tokenek száma is lehet. 
 
 \section{\texttt{<repeatUntil>}}
-
 \texttt{<repeatUntil>} Egy hátultesztelő ciklusnak feleltethető amely akkor enged tovább, ha a feltétel igaz. 
 \begin{verbatim}
 <repeatUntil standard-attributes>
@@ -236,31 +233,20 @@ Egy tranzició, mely token függvényében a folyamat egy korábbi pontjára csa
 A \texttt{while}-al analóg módon megadható.
 
 \section{\texttt{<forEach>}}
-
 Végig iterál a gyerekelemeken. Megadható párhuzamos feldolgozás is. Egy \textit{Complete condition} segítségével megadható egy break utasítás ami kilép a ciklusból. 
 \begin{verbatim}
-<forEach counterName="BPELVariableName" parallel="yes|no"
-   standard-attributes>
-   standard-elements
+<forEach counterName="BPELVariableName" parallel="yes|no">
    <startCounterValue expressionLanguage="anyURI"?>
-      unsigned-integer-expression
+  	unsigned-integer-expression
    </startCounterValue>
    <finalCounterValue expressionLanguage="anyURI"?>
-      unsigned-integer-expression
+  	unsigned-integer-expression
    </finalCounterValue>
-   <completionCondition>?
-      <branches expressionLanguage="anyURI"?
-         successfulBranchesOnly="yes|no"?>?
-         unsigned-integer-expression
-      </branches>
-   </completionCondition>
-   <scope ...>...</scope>
 </forEach>
 \end{verbatim}
 Egyszerű loop utasítás, azonban párhuzamosítás esetén a részhálóból megfelelő példányszámot generáltatunk. 
 
 \section{\texttt{<pick>}}
-
 Üzenetek várására vagy időtúllépés eseményre figyel. Ezek bármelyike a szubprocessz végrehajtásához vezet. 
 \begin{verbatim}
 <pick createInstance="yes|no"? standard-attributes>
@@ -297,6 +283,9 @@ A grafikus megjelenítése \aref{fig:pick}. ábrán látható.
 \label{fig:pick}
 \end{figure}
 
+Összetartó hálóval és egy tranzícióval képezhető le.
+
+
 \section{\texttt{<flow>}}
 
 Konkurens elemek deklarálására szolgál. Linkek segítségével megadható függőségi viszony a gyerekek között. 
@@ -317,7 +306,7 @@ A grafikus megjelenítése \aref{fig:flow}. ábrán látható.
 \caption{A \texttt{flow} grafikus jelölése az Oracle BPEL designer-ben}
 \label{fig:flow}
 \end{figure}
-
+Leképzése egyszerű, hisz a megfelelő gyerek elemek nem szekvenciálisan helyezkednek el, hanem párhuzamosan.
 \section{\texttt{<scope>}}
 
 A gyerek elemek hatókörét lehet vele szabályozni.
@@ -354,44 +343,4 @@ A gyerek elemek hatókörét lehet vele szabályozni.
 \end{verbatim}
 Nem generál új elemet, csak a láthatósági, azaz visszacsatolási elemeket adja meg. 
 
-\section{\texttt{<compensateScope>}}
 
-\texttt{<compensateScope>}
-%TODO ???
-\begin{verbatim}
-<compensateScope target="NCName" standard-attributes>
-   standard-elements
-</compensateScope>
-\end{verbatim}
-
-\section{\texttt{<compensate>}}
-
-\texttt{<compensate>}
-%TODO ???
-\begin{verbatim}
-<compensate standard-attributes>
-   standard-elements
-</compensate>
-\end{verbatim}
-
-\section{\texttt{<rethrow>}}
-
-\texttt{<rethrow>}
-%TODO ???
-\begin{verbatim}
-<rethrow standard-attributes>
-   standard-elements
-</rethrow>
-\end{verbatim}
-
-\section{\texttt{<extensionActivity>}}
-
-\texttt{<extensionActivity>}
-%TODO ???
-\begin{verbatim}
-<extensionActivity>
-   <anyElementQName standard-attributes>
-      standard-elements
-   </anyElementQName>
-</extensionActivity>
-\end{verbatim}
